@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import {
   Box,
@@ -13,7 +13,20 @@ import {
 
 function App() {
   // const [count, setCount] = useState(0)
+  const [type, setType] = useState("text");
+  const [plainText, setPlainText] = useState("");
+  const [algorithm, setAlgorithm] = useState("vignere");
+  const [key, setKey] = useState("");
+  const [decryptText, setDecryptText] = useState("");
+  const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setType(event.target.value);
+  };
 
+  const handleAlgorithmChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setAlgorithm(event.target.value);
+  };
   return (
     <Box
       w={"full"}
@@ -33,7 +46,12 @@ function App() {
       >
         <FormControl>
           <FormLabel>Input Type</FormLabel>
-          <Select placeholder="Select your input type" size={"lg"}>
+          <Select
+            placeholder="Select your input type"
+            size={"lg"}
+            value={type}
+            onChange={(e) => handleTypeChange(e)}
+          >
             <option value="text">Text</option>
             <option value="file">File</option>
           </Select>
@@ -41,11 +59,24 @@ function App() {
 
         <FormControl id="input-text">
           <FormLabel>Input text:</FormLabel>
-          <Input placeholder="(plain)" />
+          {type === "text" ? (
+            <Input
+              type="text"
+              placeholder="Enter your plain text here"
+              value={plainText}
+              onChange={(e) => setPlainText(e.target.value)}
+            />
+          ) : (
+            <Input type="file" />
+          )}
         </FormControl>
         <FormControl>
           <FormLabel>Algorithm :</FormLabel>
-          <Select placeholder="Select your encryption algorithm">
+          <Select
+            placeholder="Select your encryption algorithm"
+            onChange={(e) => handleAlgorithmChange(e)}
+            value={algorithm}
+          >
             <option value="vignere"> Vignere Cipher Standard</option>
             <option value="varian-vignere">
               Varian Vignere Cipher Standard
@@ -58,7 +89,22 @@ function App() {
         </FormControl>
         <FormControl>
           <FormLabel>Key :</FormLabel>
-          <Input type="text" placeholder="Enter your key" />
+          <Input
+            type="text"
+            placeholder="Enter your key"
+            value={key}
+            onChange={(e) => setKey(e.target.value)}
+          />
+        </FormControl>
+        <FormControl>
+          <FormLabel>
+            Decrypt Text
+          </FormLabel>
+          <Input
+            type="text"
+            value={decryptText}
+            onChange={(e)=>setDecryptText(e.target.value)}
+          />
         </FormControl>
         <ButtonGroup variant="outline" spacing="6" mt={12}>
           <Button colorScheme="blue">Ecnrypt</Button>
