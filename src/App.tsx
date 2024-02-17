@@ -10,6 +10,7 @@ import {
   Input,
   Select,
 } from "@chakra-ui/react";
+import { encrypt } from "./algorithms/algotihm";
 
 function App() {
   // const [count, setCount] = useState(0)
@@ -18,6 +19,12 @@ function App() {
   const [algorithm, setAlgorithm] = useState("vignere");
   const [key, setKey] = useState("");
   const [decryptText, setDecryptText] = useState("");
+
+  const handleEncrypt = () => {
+    const result = encrypt({ key, plainText, algorithm });
+    setDecryptText(result ? result : "")
+  };
+
   const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setType(event.target.value);
   };
@@ -82,9 +89,9 @@ function App() {
               Varian Vignere Cipher Standard
             </option>
             <option value="extended-vignere">Extended Vignere</option>
-            <option value="playfair-cipher">Playfair Cipher</option>
-            <option value="affine-cipher">Affine Cipher</option>
-            <option value="hill-cipher">Hill Cipher</option>
+            <option value="playfair">Playfair Cipher</option>
+            <option value="affine">Affine Cipher</option>
+            <option value="hill">Hill Cipher</option>
           </Select>
         </FormControl>
         <FormControl>
@@ -97,17 +104,17 @@ function App() {
           />
         </FormControl>
         <FormControl>
-          <FormLabel>
-            Decrypt Text
-          </FormLabel>
+          <FormLabel>Decrypt Text</FormLabel>
           <Input
             type="text"
             value={decryptText}
-            onChange={(e)=>setDecryptText(e.target.value)}
+            onChange={(e) => setDecryptText(e.target.value)}
           />
         </FormControl>
         <ButtonGroup variant="outline" spacing="6" mt={12}>
-          <Button colorScheme="blue">Ecnrypt</Button>
+          <Button colorScheme="blue" onClick={() => handleEncrypt()}>
+            Ecnrypt
+          </Button>
           <Button>Decrypt</Button>
         </ButtonGroup>
       </Box>
