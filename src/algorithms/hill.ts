@@ -1,19 +1,25 @@
-import { convertPlainTextToNumber } from "../utils/plaintext.number";
+import { HillMatrix, HillMatrixPlainText } from "../type/hill.type";
+import { convertPlainTextToNumber } from "../utils/plaintext.processing";
 
 interface HillCipherProps {
-  matrix?: string[][];
+  stringMatrix?: string[][];
   plainText: string;
 }
 export const hillCipher = ({
-  matrix = [
+  stringMatrix = [
     ["", ""],
     ["", ""],
   ],
   plainText,
 }: HillCipherProps) => {
-  console.log("INi matrix :", matrix, plainText);
+  //   console.log("INi matrix :", matrix, plainText);
   const normalizedText = plainText.replace(/\s+/g, "").toLowerCase();
   const numbers = convertPlainTextToNumber(normalizedText);
-  console.log("INi numbers", numbers);
+  const matrix = new HillMatrix(stringMatrix);
+  const plainTextMatrix = new HillMatrixPlainText(numbers, stringMatrix.length);
+
+  console.log("Ini matrix : ", matrix);
+  console.log("INi numbers", plainTextMatrix);
+
   return "hill";
 };
