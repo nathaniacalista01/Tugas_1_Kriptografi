@@ -1,7 +1,9 @@
 import { affineCipher } from "./affine";
+import { hillCipher } from "./hill";
 import { playfair } from "./playfair";
 
 interface EncryptInterface {
+  matrix? : string[][];
   slope? : number;
   intercept?:number;
   key?: string;
@@ -9,7 +11,7 @@ interface EncryptInterface {
   algorithm: string;
 }
 
-export const encrypt = ({ slope,intercept,key, plainText, algorithm }: EncryptInterface) => {
+export const encrypt = ({ matrix,slope,intercept,key, plainText, algorithm }: EncryptInterface) => {
   switch (algorithm) {
     case "vignere":
       // Enter function for vignere
@@ -18,6 +20,8 @@ export const encrypt = ({ slope,intercept,key, plainText, algorithm }: EncryptIn
       return playfair({key,plainText});
     case "affine":
       return affineCipher({slope,intercept,plainText})
+    case "hill":
+      return hillCipher({matrix, plainText})
     default:
       break;
   }

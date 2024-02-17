@@ -57,7 +57,6 @@ export class PlayfairMatrix {
         y = 0;
       }
     }
-    console.log(this.coordinateToValueMap);
   }
 
   public getKey() {

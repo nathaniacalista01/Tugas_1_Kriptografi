@@ -10,12 +10,11 @@ import {
   Input,
   Select,
 } from "@chakra-ui/react";
-import { encrypt } from "./algorithms/algotihm";
+import { encrypt } from "./algorithms/encrypt";
 import AffineCipherForm from "./components/affine.key";
 import MatrixDisplay from "./components/hill.key";
 
 function App() {
-  // const [count, setCount] = useState(0)
   const [type, setType] = useState("text");
   const [plainText, setPlainText] = useState("");
   const [algorithm, setAlgorithm] = useState("vignere");
@@ -23,9 +22,14 @@ function App() {
   const [decryptText, setDecryptText] = useState("");
   const [slope, setSlope] = useState(0);
   const [intercept, setIntercept] = useState(0);
+  const [matrix, setMatrix] = useState<string[][]>(
+    Array(Number(0))
+      .fill("")
+      .map(() => Array(Number(0)).fill(""))
+  );
 
   const handleEncrypt = () => {
-    const result = encrypt({ slope, intercept, key, plainText, algorithm });
+    const result = encrypt({ matrix,slope, intercept, key, plainText, algorithm });
     setDecryptText(result ? result : "");
   };
 
@@ -37,16 +41,6 @@ function App() {
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setIntercept(Number(event.target.value));
-  };
-
-  const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setType(event.target.value);
-  };
-
-  const handleAlgorithmChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setAlgorithm(event.target.value);
   };
   return (
     <Box
@@ -71,7 +65,7 @@ function App() {
             placeholder="Select your input type"
             size={"lg"}
             value={type}
-            onChange={(e) => handleTypeChange(e)}
+            onChange={(e) => setType(e.target.value)}
           >
             <option value="text">Text</option>
             <option value="file">File</option>
@@ -95,7 +89,7 @@ function App() {
           <FormLabel>Algorithm :</FormLabel>
           <Select
             placeholder="Select your encryption algorithm"
-            onChange={(e) => handleAlgorithmChange(e)}
+            onChange={(e) => setAlgorithm(e.target.value)}
             value={algorithm}
           >
             <option value="vignere"> Vignere Cipher Standard</option>
@@ -127,7 +121,9 @@ function App() {
             />
           </FormControl>
         )}
-        {algorithm === "hill" && <MatrixDisplay />}
+        {algorithm === "hill" && (
+          <MatrixDisplay matrix={matrix} setMatrix={setMatrix} />
+        )}
         <FormControl>
           <FormLabel onClick={() => console.log(algorithm)}>
             Decrypt Text
