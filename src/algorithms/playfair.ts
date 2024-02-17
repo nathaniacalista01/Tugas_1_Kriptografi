@@ -3,11 +3,11 @@ import { plainTextPlayfairConverter } from "../utils/plaintext.processing";
 import { duplicate_remover, space_remover } from "../utils/remover";
 
 interface PlayfairInterface {
-  key: string;
+  key?: string;
   plainText: string;
 }
 
-export const playfair = ({ key, plainText }: PlayfairInterface) => {
+export const playfair = ({ key = "", plainText }: PlayfairInterface) => {
   const removed_duplicate_key = duplicate_remover(key.toUpperCase());
   const playfairMatrix = new PlayfairMatrix(removed_duplicate_key);
   const bigrams = plainTextPlayfairConverter(

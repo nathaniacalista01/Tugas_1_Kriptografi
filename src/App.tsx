@@ -19,10 +19,22 @@ function App() {
   const [algorithm, setAlgorithm] = useState("vignere");
   const [key, setKey] = useState("");
   const [decryptText, setDecryptText] = useState("");
+  const [slope, setSlope] = useState(0);
+  const [intercept, setIntercept] = useState(0);
 
   const handleEncrypt = () => {
-    const result = encrypt({ key, plainText, algorithm });
-    setDecryptText(result ? result : "")
+    const result = encrypt({ slope,intercept, key, plainText, algorithm });
+    setDecryptText(result ? result : "");
+  };
+
+  const handleSlopeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSlope(Number(event.target.value));
+  };
+
+  const handleInterceptChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setIntercept(Number(event.target.value));
   };
 
   const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -94,17 +106,59 @@ function App() {
             <option value="hill">Hill Cipher</option>
           </Select>
         </FormControl>
+        {algorithm === "affine" && (
+          <FormControl display={"flex"} flexDirection={"row"} gap={4}>
+            <Box width={"50%"}>
+              <FormLabel>Slope / A</FormLabel>
+              <Select
+                placeholder="Select your slope/a"
+                onChange={(e) => handleSlopeChange(e)}
+                value={slope}
+              >
+                {[1, 3, 5, 7, 9, 11, 15, 17, 19, 21, 23, 25].map((a) => (
+                  <option key={a} value={a}>
+                    {a}
+                  </option>
+                ))}
+              </Select>
+            </Box>
+            <Box width={"50%"}>
+              <FormLabel>Intercept/B</FormLabel>
+              <Select
+                placeholder="Select your intercept/b"
+                value={intercept}
+                onChange={(e) => handleInterceptChange(e)}
+              >
+                {[
+                  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
+                  19, 20, 21, 22, 23, 24, 25,
+                ].map((number) => {
+                  return (
+                    <option key={number} value={number}>
+                      {number}
+                    </option>
+                  );
+                })}
+              </Select>
+            </Box>
+          </FormControl>
+        )}
+        {algorithm !== "affine" && (
+          <FormControl>
+            <FormLabel>Key :</FormLabel>
+            <Input
+              type="text"
+              placeholder="Enter your key"
+              value={key}
+              onChange={(e) => setKey(e.target.value)}
+            />
+          </FormControl>
+        )}
+
         <FormControl>
-          <FormLabel>Key :</FormLabel>
-          <Input
-            type="text"
-            placeholder="Enter your key"
-            value={key}
-            onChange={(e) => setKey(e.target.value)}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Decrypt Text</FormLabel>
+          <FormLabel onClick={() => console.log(algorithm)}>
+            Decrypt Text
+          </FormLabel>
           <Input
             type="text"
             value={decryptText}
