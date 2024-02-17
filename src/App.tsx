@@ -11,6 +11,8 @@ import {
   Select,
 } from "@chakra-ui/react";
 import { encrypt } from "./algorithms/algotihm";
+import AffineCipherForm from "./components/affine.key";
+import MatrixDisplay from "./components/hill.key";
 
 function App() {
   // const [count, setCount] = useState(0)
@@ -23,7 +25,7 @@ function App() {
   const [intercept, setIntercept] = useState(0);
 
   const handleEncrypt = () => {
-    const result = encrypt({ slope,intercept, key, plainText, algorithm });
+    const result = encrypt({ slope, intercept, key, plainText, algorithm });
     setDecryptText(result ? result : "");
   };
 
@@ -107,43 +109,14 @@ function App() {
           </Select>
         </FormControl>
         {algorithm === "affine" && (
-          <FormControl display={"flex"} flexDirection={"row"} gap={4}>
-            <Box width={"50%"}>
-              <FormLabel>Slope / A</FormLabel>
-              <Select
-                placeholder="Select your slope/a"
-                onChange={(e) => handleSlopeChange(e)}
-                value={slope}
-              >
-                {[1, 3, 5, 7, 9, 11, 15, 17, 19, 21, 23, 25].map((a) => (
-                  <option key={a} value={a}>
-                    {a}
-                  </option>
-                ))}
-              </Select>
-            </Box>
-            <Box width={"50%"}>
-              <FormLabel>Intercept/B</FormLabel>
-              <Select
-                placeholder="Select your intercept/b"
-                value={intercept}
-                onChange={(e) => handleInterceptChange(e)}
-              >
-                {[
-                  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
-                  19, 20, 21, 22, 23, 24, 25,
-                ].map((number) => {
-                  return (
-                    <option key={number} value={number}>
-                      {number}
-                    </option>
-                  );
-                })}
-              </Select>
-            </Box>
-          </FormControl>
+          <AffineCipherForm
+            slope={slope}
+            intercept={intercept}
+            handleSlopeChange={handleSlopeChange}
+            handleInterceptChange={handleInterceptChange}
+          />
         )}
-        {algorithm !== "affine" && (
+        {algorithm === "playfair" && (
           <FormControl>
             <FormLabel>Key :</FormLabel>
             <Input
@@ -154,7 +127,7 @@ function App() {
             />
           </FormControl>
         )}
-
+        {algorithm === "hill" && <MatrixDisplay />}
         <FormControl>
           <FormLabel onClick={() => console.log(algorithm)}>
             Decrypt Text
