@@ -13,6 +13,7 @@ export const playfair = ({ key, plainText }: PlayfairInterface) => {
   const bigrams = plainTextPlayfairConverter(
     space_remover(plainText.toUpperCase())
   );
+  console.log("Ini bigrams : ", bigrams)
   const descryptBigrams = [];
   for (const bigram of bigrams) {
     let decrypt;

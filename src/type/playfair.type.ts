@@ -20,7 +20,6 @@ export class Playfair {
 
 export class PlayfairMatrix {
   private key: string;
-  private matrix: Playfair[] = [];
   private valueToCoordinateMap: { [key: string]: Coordinate } = {}; // Map for efficient lookups
   private coordinateToValueMap: { [key: string]: string } = {}; // Map for reverse lookup
 
@@ -33,7 +32,6 @@ export class PlayfairMatrix {
     for (const char of this.key) {
       if (!this.valueToCoordinateMap[char]) {
         const playfair = new Playfair(char, x, y);
-        this.matrix.push(playfair);
         this.valueToCoordinateMap[char] = playfair.getCoordinate();
         this.coordinateToValueMap[`${x},${y}`] = char; // Adding to reverse lookup map
 
@@ -49,7 +47,6 @@ export class PlayfairMatrix {
     // Process remaining alphabets
     for (const char of alphabets) {
       const playfair = new Playfair(char, x, y);
-      this.matrix.push(playfair);
       this.valueToCoordinateMap[char] = playfair.getCoordinate();
       this.coordinateToValueMap[`${x},${y}`] = char; // Adding to reverse lookup map
 
@@ -60,6 +57,7 @@ export class PlayfairMatrix {
         y = 0;
       }
     }
+    console.log(this.coordinateToValueMap);
   }
 
   public getKey() {
@@ -88,9 +86,7 @@ export class PlayfairMatrix {
   public sameRow(plain: string) {
     const current_coordinate = this.getCoordinateByValue(plain);
     const next =
-      current_coordinate.getY() + 1 > 4
-        ? (current_coordinate.getY() + 1) % 4
-        : current_coordinate.getY() + 1;
+      current_coordinate.getY() + 1 > 4 ? 0 : current_coordinate.getY() + 1;
     const value = this.getValueByCoordinate(current_coordinate.getX(), next);
     return value;
   }
@@ -98,9 +94,7 @@ export class PlayfairMatrix {
   public sameColumn(plain: string) {
     const current_coordinate = this.getCoordinateByValue(plain);
     const next =
-      current_coordinate.getX() + 1 > 4
-        ? (current_coordinate.getX() + 1) % 4
-        : current_coordinate.getX() + 1;
+      current_coordinate.getX() + 1 > 4 ? 0 : current_coordinate.getX() + 1;
     const value = this.getValueByCoordinate(next, current_coordinate.getY());
     return value;
   }
