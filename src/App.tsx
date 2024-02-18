@@ -8,7 +8,10 @@ import {
   FormLabel,
   Heading,
   Input,
+  Radio,
+  RadioGroup,
   Select,
+  Stack,
 } from "@chakra-ui/react";
 import { encrypt } from "./algorithms/encrypt";
 import AffineCipherForm from "./components/affine.key";
@@ -22,6 +25,7 @@ function App() {
   const [decryptText, setDecryptText] = useState("");
   const [slope, setSlope] = useState(0);
   const [intercept, setIntercept] = useState(0);
+  const [value, setValue] = useState("encrypt");
   const [matrix, setMatrix] = useState<string[][]>(
     Array(Number(0))
       .fill("")
@@ -29,7 +33,14 @@ function App() {
   );
 
   const handleEncrypt = () => {
-    const result = encrypt({ matrix,slope, intercept, key, plainText, algorithm });
+    const result = encrypt({
+      matrix,
+      slope,
+      intercept,
+      key,
+      plainText,
+      algorithm,
+    });
     setDecryptText(result ? result : "");
   };
 
@@ -71,13 +82,26 @@ function App() {
             <option value="file">File</option>
           </Select>
         </FormControl>
-
+        <FormControl>
+          <RadioGroup onChange={setValue} value={value}>
+            <Stack direction={"row"}>
+              <Radio value="encrypt">Encrypt</Radio>
+              <Radio value="decrypt">Decrypt</Radio>
+            </Stack>
+          </RadioGroup>
+        </FormControl>
         <FormControl id="input-text">
-          <FormLabel>Input text:</FormLabel>
+          <FormLabel>
+            {value === "encrypt" ? "Input Text" : "Input Decrypt"}
+          </FormLabel>
           {type === "text" ? (
             <Input
               type="text"
-              placeholder="Enter your plain text here"
+              placeholder={
+                value === "encrypt"
+                  ? "Enter your plain text here"
+                  : "Enter your encrypted text here"
+              }
               value={plainText}
               onChange={(e) => setPlainText(e.target.value)}
             />
@@ -125,9 +149,7 @@ function App() {
           <MatrixDisplay matrix={matrix} setMatrix={setMatrix} />
         )}
         <FormControl>
-          <FormLabel onClick={() => console.log(algorithm)}>
-            Decrypt Text
-          </FormLabel>
+          <FormLabel onClick={() => console.log(algorithm)}>Result</FormLabel>
           <Input
             type="text"
             value={decryptText}
@@ -135,10 +157,13 @@ function App() {
           />
         </FormControl>
         <ButtonGroup variant="outline" spacing="6" mt={12}>
-          <Button colorScheme="blue" onClick={() => handleEncrypt()}>
-            Ecnrypt
-          </Button>
-          <Button>Decrypt</Button>
+          {value === "encrypt" ? (
+            <Button colorScheme="blue" onClick={() => handleEncrypt()}>
+              Ecnrypt
+            </Button>
+          ) : (
+            <Button colorScheme="blue">Decrypt</Button>
+          )}
         </ButtonGroup>
       </Box>
     </Box>

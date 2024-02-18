@@ -1,4 +1,4 @@
-import { space_remover } from "../utils/remover";
+import { space_remover } from "../../utils/remover";
 
 interface AffineCipherProps {
   slope?: number;

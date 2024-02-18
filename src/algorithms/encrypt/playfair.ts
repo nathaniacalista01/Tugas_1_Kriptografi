@@ -1,6 +1,6 @@
-import { PlayfairMatrix } from "../type/playfair.type";
-import { plainTextPlayfairConverter } from "../utils/plaintext.processing";
-import { duplicate_remover, space_remover } from "../utils/remover";
+import { PlayfairMatrix } from "../../type/playfair.type";
+import { plainTextPlayfairConverter } from "../../utils/plaintext.processing";
+import { duplicate_remover, space_remover } from "../../utils/remover";
 
 interface PlayfairInterface {
   key?: string;
@@ -13,7 +13,7 @@ export const playfair = ({ key = "", plainText }: PlayfairInterface) => {
   const bigrams = plainTextPlayfairConverter(
     space_remover(plainText.toUpperCase())
   );
-  console.log("Ini bigrams : ", bigrams)
+  console.log("Ini bigrams : ", bigrams);
   const descryptBigrams = [];
   for (const bigram of bigrams) {
     let decrypt;

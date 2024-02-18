@@ -1,5 +1,5 @@
-import { HillMatrix, HillMatrixPlainText } from "../type/hill.type";
-import { convertPlainTextToNumber } from "../utils/plaintext.processing";
+import { HillMatrix, HillMatrixPlainText } from "../../type/hill.type";
+import { convertPlainTextToNumber } from "../../utils/plaintext.processing";
 
 interface HillCipherProps {
   stringMatrix?: string[][];

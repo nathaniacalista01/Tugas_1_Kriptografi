@@ -1,6 +1,6 @@
-import { affineCipher } from "./affine";
-import { hillCipher } from "./hill";
-import { playfair } from "./playfair";
+import { affineCipher } from "./encrypt/affine";
+import { hillCipher } from "./encrypt/hill";
+import { playfair } from "./encrypt/playfair";
 
 interface EncryptInterface {
   matrix?: string[][];
