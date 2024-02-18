@@ -16,13 +16,14 @@ import {
 import { encrypt } from "./algorithms/encrypt";
 import AffineCipherForm from "./components/affine.key";
 import MatrixDisplay from "./components/hill.key";
+import { decrypt } from "./algorithms/decrypt";
 
 function App() {
   const [type, setType] = useState("text");
   const [plainText, setPlainText] = useState("");
   const [algorithm, setAlgorithm] = useState("vignere");
   const [key, setKey] = useState("");
-  const [decryptText, setDecryptText] = useState("");
+  const [result, setResult] = useState("");
   const [slope, setSlope] = useState(0);
   const [intercept, setIntercept] = useState(0);
   const [value, setValue] = useState("encrypt");
@@ -32,6 +33,16 @@ function App() {
       .map(() => Array(Number(0)).fill(""))
   );
 
+  const handleDecrypt = () => {
+    const result = decrypt({
+      slope,
+      intercept,
+      key,
+      decryptText: plainText,
+      algorithm,
+    });
+    setResult(result ? result : "");
+  };
   const handleEncrypt = () => {
     const result = encrypt({
       matrix,
@@ -41,7 +52,7 @@ function App() {
       plainText,
       algorithm,
     });
-    setDecryptText(result ? result : "");
+    setResult(result ? result : "");
   };
 
   const handleSlopeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -162,11 +173,7 @@ function App() {
         )}
         <FormControl>
           <FormLabel onClick={() => console.log(algorithm)}>Result</FormLabel>
-          <Input
-            type="text"
-            value={decryptText}
-            onChange={(e) => setDecryptText(e.target.value)}
-          />
+          <Input type="text" value={result} />
         </FormControl>
         <ButtonGroup variant="outline" spacing="6" mt={12}>
           {value === "encrypt" ? (
@@ -174,7 +181,9 @@ function App() {
               Ecnrypt
             </Button>
           ) : (
-            <Button colorScheme="blue">Decrypt</Button>
+            <Button colorScheme="blue" onClick={() => handleDecrypt()}>
+              Decrypt
+            </Button>
           )}
         </ButtonGroup>
       </Box>
