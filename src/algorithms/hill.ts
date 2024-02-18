@@ -17,9 +17,6 @@ export const hillCipher = ({
   const numbers = convertPlainTextToNumber(normalizedText);
   const matrix = new HillMatrix(stringMatrix);
   const plainTextMatrix = new HillMatrixPlainText(numbers, stringMatrix.length);
-
-  console.log("Ini matrix : ", matrix);
-  console.log("INi numbers", plainTextMatrix);
-
-  return "hill";
+  const result = matrix.encryptMatrix(plainTextMatrix);
+  return result;
 };

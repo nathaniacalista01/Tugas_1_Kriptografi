@@ -1,4 +1,7 @@
-import { matrixConverter } from "../utils/matrix.processing";
+import {
+  matrixConverter,
+  matrixNumberToString,
+} from "../utils/matrix.processing";
 
 export class HillMatrix {
   private matrix: number[][];
@@ -8,6 +11,29 @@ export class HillMatrix {
 
   public getMatrix() {
     return this.matrix;
+  }
+
+  public encryptMatrix(plainTextMatrices: HillMatrixPlainText) {
+    const results = [];
+    for (const plainText of plainTextMatrices.getMatrices()) {
+      const result = this.multiplyMatrix(plainText);
+      results.push(...result);
+    }
+    const decryptText = matrixNumberToString({ matrix: results });
+    return decryptText.join("");
+  }
+
+  public multiplyMatrix(plainText: number[]) {
+    const results = [];
+    for (let i = 0; i < this.matrix.length; i++) {
+      const rows = this.matrix[i];
+      let result = 0;
+      for (let j = 0; j < rows.length; j++) {
+        result += rows[j] * plainText[j];
+      }
+      results.push(result % 26);
+    }
+    return results;
   }
 }
 
