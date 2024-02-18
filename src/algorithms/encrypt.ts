@@ -1,7 +1,7 @@
 import { affineCipher } from "./encrypt/affine";
 import { hillCipher } from "./encrypt/hill";
 import { playfair } from "./encrypt/playfair";
-
+import { vigenere } from "./encrypt/vigenere";
 interface EncryptInterface {
   matrix?: string[][];
   slope?: number;
@@ -20,9 +20,15 @@ export const encrypt = ({
   algorithm,
 }: EncryptInterface) => {
   switch (algorithm) {
-    case "vignere":
+    case "vigenere":
       // Enter function for vignere
-      return "vignere";
+      return vigenere({isStandard:true, key, plainText});
+    case "varian-vigenere":
+      return vigenere({isStandard:false, key, plainText});
+    case "extended-vigenere":
+      return "extended";
+    case "super":
+      return "super";
     case "playfair":
       return playfair({ key, plainText });
     case "affine":
