@@ -34,7 +34,13 @@ function App() {
   );
 
   const handleDecrypt = () => {
-    const result = decrypt({ key, plainText, algorithm });
+    const result = decrypt({
+      slope,
+      intercept,
+      key,
+      decryptText: plainText,
+      algorithm,
+    });
     setResult(result ? result : "");
   };
   const handleEncrypt = () => {
