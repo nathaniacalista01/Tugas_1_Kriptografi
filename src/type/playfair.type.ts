@@ -82,7 +82,7 @@ export class PlayfairMatrix {
     return first_coordinate.getY() === second_coordinate.getY();
   }
 
-  public sameRow(plain: string) {
+  public encryptSameRow(plain: string) {
     const current_coordinate = this.getCoordinateByValue(plain);
     const next =
       current_coordinate.getY() + 1 > 4 ? 0 : current_coordinate.getY() + 1;
@@ -90,7 +90,7 @@ export class PlayfairMatrix {
     return value;
   }
 
-  public sameColumn(plain: string) {
+  public encryptSameColumn(plain: string) {
     const current_coordinate = this.getCoordinateByValue(plain);
     const next =
       current_coordinate.getX() + 1 > 4 ? 0 : current_coordinate.getX() + 1;
@@ -111,4 +111,22 @@ export class PlayfairMatrix {
     );
     return [first_value, second_value];
   }
+
+  public decryptSameRow(plain: string) {
+    const current_coordinate = this.getCoordinateByValue(plain);
+    const prev =
+      current_coordinate.getY() - 1 < 0 ? 4 : current_coordinate.getY() - 1;
+    const value = this.getValueByCoordinate(current_coordinate.getX(), prev);
+    return value;
+  }
+
+  public decryptSameColumn(plain: string) {
+    const current_coordinate = this.getCoordinateByValue(plain);
+    const prev =
+      current_coordinate.getX() - 1 < 0 ? 4 : current_coordinate.getX() - 1;
+    const value = this.getValueByCoordinate(prev, current_coordinate.getY());
+    return value;
+  }
+
+  
 }
