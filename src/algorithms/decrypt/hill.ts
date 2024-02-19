@@ -21,5 +21,6 @@ export const decryptHill = ({
     numbers,
     stringMatrix.length
   );
-  console.log("Ini hasilnya : ", matrix.decryptMatrix(decryptTextMatrix));
+  const result = matrix.decryptMatrix(decryptTextMatrix);
+  return result;
 };
