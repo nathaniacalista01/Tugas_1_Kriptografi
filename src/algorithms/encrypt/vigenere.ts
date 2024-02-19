@@ -19,7 +19,6 @@ export const vigenere = ({isStandard, key = "", plainText}: VigenereInterface) =
                 newKey += key[i%keyLength]
             }
         }
-        console.log('hai')
         
     }else{
         if(isShortKey){
