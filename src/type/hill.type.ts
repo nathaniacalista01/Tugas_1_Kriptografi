@@ -1,5 +1,6 @@
 import {
   matrixConverter,
+  matrixInverse,
   matrixNumberToString,
 } from "../utils/matrix.processing";
 
@@ -22,6 +23,16 @@ export class HillMatrix {
     const decryptText = matrixNumberToString({ matrix: results });
     return decryptText.join("");
   }
+  public decryptMatrix(decryptTextMatrices: HillMatrixPlainText) {
+    const results = [];
+    for (const decryptText of decryptTextMatrices.getMatrices()) {
+      const result = this.multiplyInverseMatrix(decryptText);
+      results.push(...result);
+    }
+    const encryptText = matrixNumberToString({ matrix: results });
+    console.log("Ini ecnrypt text : ", encryptText);
+    return encryptText.join("");
+  }
 
   public multiplyMatrix(plainText: number[]) {
     const results = [];
@@ -34,6 +45,23 @@ export class HillMatrix {
       results.push(result % 26);
     }
     return results;
+  }
+
+  public multiplyInverseMatrix(decryptText: number[]) {
+    const results = [];
+    const inverseMatrix = this.getInverse();
+    for (let i = 0; i < inverseMatrix.length; i++) {
+      const rows = inverseMatrix[i];
+      let result = 0;
+      for (let j = 0; j < rows.length; j++) {
+        result += rows[j] * decryptText[j];
+      }
+      results.push(result % 26);
+    }
+    return results;
+  }
+  public getInverse() {
+    return matrixInverse(this.matrix);
   }
 }
 

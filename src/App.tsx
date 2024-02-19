@@ -35,6 +35,7 @@ function App() {
 
   const handleDecrypt = () => {
     const result = decrypt({
+      matrix,
       slope,
       intercept,
       key,
