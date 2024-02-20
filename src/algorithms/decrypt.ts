@@ -5,6 +5,7 @@ import { decryptVigenere } from "./decrypt/vigenere";
 import { decryptHill } from "./decrypt/hill";
 
 import { playfairDecrypt } from "./decrypt/playfair";
+import { decryptVigenereExt } from "./decrypt/vigenereExt";
 
 interface DecryptInterface {
   matrix?: string[][];
@@ -29,6 +30,8 @@ export const decrypt = ({
       return decryptVigenere({isStandard:true, key, decryptText});
     case "varian-vigenere":
       return decryptVigenere({isStandard:false, key, decryptText});
+    case "extended-vigenere":
+        return decryptVigenereExt({key, decryptText, isFile: false})
     case "playfair":
       return playfairDecrypt({ key, decryptText });
     case "affine":

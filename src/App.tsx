@@ -50,7 +50,7 @@ function App() {
       reader.readAsText(file);
       reader.onload = () => {
         const text = reader.result;
-        console.log("ini text : ",text)
+        console.log("ini text : ", text);
         setPlainText(text as string);
       };
     }
@@ -62,7 +62,7 @@ function App() {
       plainText,
       algorithm,
     });
-    console.log("ini result :", result)
+    console.log("ini result :", result);
     setResult(result ? result : "");
   };
   const saveToBinaryFile = (): void => {
@@ -178,7 +178,9 @@ function App() {
             <option value="hill">Hill Cipher</option>
           </Select>
         </FormControl>
-        {(algorithm === "vigenere" || algorithm === "varian-vigenere") && (
+        {(algorithm === "vigenere" ||
+          algorithm === "varian-vigenere" ||
+          algorithm === "extended-vigenere") && (
           <FormControl>
             <FormLabel>Key :</FormLabel>
             <Input

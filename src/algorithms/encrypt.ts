@@ -2,6 +2,7 @@ import { affineCipher } from "./encrypt/affine";
 import { hillCipher } from "./encrypt/hill";
 import { playfair } from "./encrypt/playfair";
 import { vigenere } from "./encrypt/vigenere";
+import { vigenereExt } from "./encrypt/vigenereExt";
 interface EncryptInterface {
   matrix?: string[][];
   slope?: number;
@@ -26,7 +27,7 @@ export const encrypt = ({
     case "varian-vigenere":
       return vigenere({isStandard:false, key, plainText});
     case "extended-vigenere":
-      return "extended";
+      return vigenereExt({key, plainText, isFile: false});
     case "super":
       return "super";
     case "playfair":
