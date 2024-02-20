@@ -10,9 +10,9 @@ interface PlayfairInterface {
 export const playfair = ({ key = "", plainText }: PlayfairInterface) => {
   const removed_duplicate_key = duplicate_remover(key.toUpperCase());
   const playfairMatrix = new PlayfairMatrix(removed_duplicate_key);
-  const bigrams = bigramsConverter(
-    space_remover(plainText.toUpperCase())
-  );
+  let sanitized_text = space_remover(plainText.toUpperCase());
+  sanitized_text = sanitized_text.replace(/[^a-zA-Z ]/g, "");
+  const bigrams = bigramsConverter(sanitized_text);
   const descryptBigrams = [];
   for (const bigram of bigrams) {
     let decrypt;

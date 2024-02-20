@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import {
   Box,
@@ -12,6 +12,7 @@ import {
   RadioGroup,
   Select,
   Stack,
+  Text,
 } from "@chakra-ui/react";
 import { encrypt } from "./algorithms/encrypt";
 import AffineCipherForm from "./components/affine.key";
@@ -21,12 +22,13 @@ import { decrypt } from "./algorithms/decrypt";
 function App() {
   const [type, setType] = useState("text");
   const [plainText, setPlainText] = useState<string>("");
-  const [algorithm, setAlgorithm] = useState("vignere");
+  const [algorithm, setAlgorithm] = useState("");
   const [key, setKey] = useState("");
   const [result, setResult] = useState("");
-  const [slope, setSlope] = useState(0);
-  const [intercept, setIntercept] = useState(0);
+  const [slope, setSlope] = useState<number | undefined>();
+  const [intercept, setIntercept] = useState<number | undefined>();
   const [value, setValue] = useState("encrypt");
+  const [isDisabled, setIsDisabled] = useState(false);
   const [matrix, setMatrix] = useState<string[][]>(
     Array(Number(0))
       .fill("")
@@ -50,7 +52,7 @@ function App() {
       reader.readAsText(file);
       reader.onload = () => {
         const text = reader.result;
-        console.log("ini text : ",text)
+        console.log("ini text : ", text);
         setPlainText(text as string);
       };
     }
@@ -62,7 +64,7 @@ function App() {
       plainText,
       algorithm,
     });
-    console.log("ini result :", result)
+    console.log("ini result :", result);
     setResult(result ? result : "");
   };
   const saveToBinaryFile = (): void => {
@@ -84,9 +86,26 @@ function App() {
     document.body.removeChild(tempLink);
   };
 
-  // const handleFile = () => {
-
-  // };
+  const checkEncrypt = () => {
+    if (algorithm === "") {
+      setIsDisabled(true);
+    } else {
+      switch (algorithm) {
+        case "vignere":
+          setIsDisabled(key === "" || plainText === "");
+          break;
+        case "playfair":
+          setIsDisabled(key === "" || plainText === "");
+          break;
+        case "affine":
+          setIsDisabled(!(slope && intercept));
+          break;
+        case "hill":
+          setIsDisabled(matrix.length <= 0);
+          break;
+      }
+    }
+  };
 
   const handleSlopeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSlope(Number(event.target.value));
@@ -97,6 +116,17 @@ function App() {
   ) => {
     setIntercept(Number(event.target.value));
   };
+
+  const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setPlainText("");
+    setFile(null);
+    setType(event.target.value);
+  };
+
+  useEffect(() => {
+    checkEncrypt();
+  }, [plainText, slope, intercept, matrix, key]);
+
   return (
     <Box
       w={"full"}
@@ -120,7 +150,7 @@ function App() {
             placeholder="Select your input type"
             size={"lg"}
             value={type}
-            onChange={(e) => setType(e.target.value)}
+            onChange={(e) => handleTypeChange(e)}
           >
             <option value="text">Text</option>
             <option value="file">File</option>
@@ -178,54 +208,62 @@ function App() {
             <option value="hill">Hill Cipher</option>
           </Select>
         </FormControl>
-        {(algorithm === "vigenere" || algorithm === "varian-vigenere") && (
+        {(algorithm === "vigenere" ||
+          algorithm === "varian-vigenere" ||
+          algorithm === "playfair") && (
           <FormControl>
             <FormLabel>Key :</FormLabel>
             <Input
               type="text"
               placeholder="Enter your key"
               value={key}
-              onChange={(e) => setKey(e.target.value)}
+              onChange={(e) => {
+                setKey(e.target.value);
+              }}
             />
           </FormControl>
         )}
         {algorithm === "affine" && (
           <AffineCipherForm
-            slope={slope}
-            intercept={intercept}
+            slope={slope ? slope : 1}
+            intercept={intercept ? intercept : 0}
             handleSlopeChange={handleSlopeChange}
             handleInterceptChange={handleInterceptChange}
           />
         )}
-        {algorithm === "playfair" && (
-          <FormControl>
-            <FormLabel>Key :</FormLabel>
-            <Input
-              type="text"
-              placeholder="Enter your key"
-              value={key}
-              onChange={(e) => setKey(e.target.value)}
-            />
-          </FormControl>
-        )}
         {algorithm === "hill" && (
           <MatrixDisplay matrix={matrix} setMatrix={setMatrix} />
         )}
-        <FormControl>
-          <FormLabel onClick={() => console.log(algorithm)}>Result</FormLabel>
-          <Input type="text" value={result} />
-        </FormControl>
+        {result && (
+          <FormControl>
+            <FormLabel>Result</FormLabel>
+            <Text>{result}</Text>
+          </FormControl>
+        )}
+
         <ButtonGroup variant="outline" spacing="6" mt={12}>
           {value === "encrypt" ? (
-            <Button colorScheme="blue" onClick={() => handleEncrypt()}>
+            <Button
+              colorScheme="blue"
+              onClick={() => handleEncrypt()}
+              isDisabled={isDisabled}
+            >
               Ecnrypt
             </Button>
           ) : (
-            <Button colorScheme="blue" onClick={() => handleDecrypt()}>
+            <Button
+              colorScheme="blue"
+              onClick={() => handleDecrypt()}
+              isDisabled={isDisabled}
+            >
               Decrypt
             </Button>
           )}
-          <Button colorScheme="green" onClick={saveToBinaryFile}>
+          <Button
+            colorScheme="green"
+            onClick={saveToBinaryFile}
+            isDisabled={result === "" ? true : false}
+          >
             Save to File
           </Button>
         </ButtonGroup>
