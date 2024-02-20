@@ -147,16 +147,28 @@ function App() {
             onChange={(e) => setAlgorithm(e.target.value)}
             value={algorithm}
           >
-            <option value="vignere"> Vignere Cipher Standard</option>
-            <option value="varian-vignere">
-              Varian Vignere Cipher Standard
+            <option value="vigenere"> Vigenere Cipher Standard</option>
+            <option value="varian-vigenere">
+              Varian Vigenere Cipher Standard
             </option>
-            <option value="extended-vignere">Extended Vignere</option>
+            <option value="extended-vigenere">Extended Vigenere</option>
             <option value="playfair">Playfair Cipher</option>
+            <option value="super">Super Enkripsi</option>
             <option value="affine">Affine Cipher</option>
             <option value="hill">Hill Cipher</option>
           </Select>
         </FormControl>
+        {(algorithm === "vigenere" || algorithm === "varian-vigenere") && (
+          <FormControl>
+            <FormLabel>Key :</FormLabel>
+            <Input
+              type="text"
+              placeholder="Enter your key"
+              value={key}
+              onChange={(e) => setKey(e.target.value)}
+            />
+          </FormControl>
+        )}
         {algorithm === "affine" && (
           <AffineCipherForm
             slope={slope}
