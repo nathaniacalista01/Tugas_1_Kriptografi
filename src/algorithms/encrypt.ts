@@ -4,6 +4,7 @@ import { affineCipher } from "./encrypt/affine";
 import { enigmaCipher } from "./encrypt/enigma";
 import { hillCipher } from "./encrypt/hill";
 import { playfair } from "./encrypt/playfair";
+import { superEncryption } from "./encrypt/super";
 import { vigenere } from "./encrypt/vigenere";
 import { vigenereExt } from "./encrypt/vigenereExt";
 interface EncryptInterface {
@@ -43,7 +44,7 @@ export const encrypt = ({
     case "extended-vigenere":
       return vigenereExt({key, plainText});
     case "super":
-      return "super";
+      return superEncryption({key, plainText});
     case "playfair":
       return playfair({ key, plainText: sanitized, extension });
     case "affine":

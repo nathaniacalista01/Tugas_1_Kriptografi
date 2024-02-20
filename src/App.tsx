@@ -159,7 +159,16 @@ function App() {
       setIsDisabled(true);
     } else {
       switch (algorithm) {
-        case "vignere":
+        case "vigenere":
+          setIsDisabled(key === "" || plainText === "");
+          break;
+        case "varian-vigenere":
+          setIsDisabled(key === "" || plainText === "");
+          break;
+        case "extended-vigenere":
+          setIsDisabled(key === "" || plainText === "");
+          break;
+        case "super":
           setIsDisabled(key === "" || plainText === "");
           break;
         case "playfair":
@@ -311,7 +320,8 @@ function App() {
         {(algorithm === "vigenere" ||
           algorithm === "varian-vigenere" ||
           algorithm === "playfair" ||
-          algorithm === "extended-vigenere") && (
+          algorithm === "extended-vigenere" ||
+          algorithm === "super") && (
           <FormControl>
             <FormLabel>Key :</FormLabel>
             <Input

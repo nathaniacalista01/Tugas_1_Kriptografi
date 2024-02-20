@@ -8,6 +8,7 @@ import { playfairDecrypt } from "./decrypt/playfair";
 import { RotorInterface } from "../type/engima.type";
 import { decryptEnigma } from "./decrypt/enigma";
 import { decryptVigenereExt } from "./decrypt/vigenereExt";
+import { superDecryption } from "./decrypt/super";
 
 interface DecryptInterface {
   matrix?: string[][];
@@ -39,7 +40,9 @@ export const decrypt = ({
     case "varian-vigenere":
       return decryptVigenere({ isStandard: false, key, decryptText });
     case "extended-vigenere":
-        return decryptVigenereExt({key, decryptText})
+      return decryptVigenereExt({key, decryptText})
+    case "super":
+      return superDecryption({key, decryptText})
     case "playfair":
       return playfairDecrypt({ key, decryptText });
     case "affine":
