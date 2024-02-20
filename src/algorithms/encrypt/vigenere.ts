@@ -1,3 +1,4 @@
+import { space_remover } from "../../utils/remover";
 interface VigenereInterface{
    isStandard: boolean;
    key?: string;
@@ -6,7 +7,7 @@ interface VigenereInterface{
 
 export const vigenere = ({isStandard, key = "", plainText}: VigenereInterface) => {
     key = key.toUpperCase()
-    plainText = plainText.toUpperCase()
+    plainText = space_remover(plainText.toUpperCase())
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     const keyLength = key.length
     const plainLength = plainText.length
