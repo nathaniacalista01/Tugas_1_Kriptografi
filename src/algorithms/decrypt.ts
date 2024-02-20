@@ -1,5 +1,9 @@
 import { decryptAffine } from "./decrypt/affine";
+
+import { decryptVigenere } from "./decrypt/vigenere";
+
 import { decryptHill } from "./decrypt/hill";
+
 import { playfairDecrypt } from "./decrypt/playfair";
 
 interface DecryptInterface {
@@ -20,6 +24,11 @@ export const decrypt = ({
   algorithm,
 }: DecryptInterface) => {
   switch (algorithm) {
+    case "vigenere":
+      // Enter function for vignere
+      return decryptVigenere({isStandard:true, key, decryptText});
+    case "varian-vigenere":
+      return decryptVigenere({isStandard:false, key, decryptText});
     case "playfair":
       return playfairDecrypt({ key, decryptText });
     case "affine":
