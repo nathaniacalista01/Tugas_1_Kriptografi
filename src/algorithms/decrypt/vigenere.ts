@@ -8,7 +8,7 @@ interface VigenereDecryptInterface{
 
 export const decryptVigenere = ({isStandard, key = "", decryptText}: VigenereDecryptInterface) => {
     key = key.toUpperCase()
-    decryptText = space_remover(decryptText.toUpperCase())
+    decryptText = space_remover(decryptText.toUpperCase().replace(/[^a-zA-Z]/g, ''))
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     const keyLength = key.length
     const cipherLength = decryptText.length

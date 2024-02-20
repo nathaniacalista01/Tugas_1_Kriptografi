@@ -7,7 +7,7 @@ interface VigenereInterface{
 
 export const vigenere = ({isStandard, key = "", plainText}: VigenereInterface) => {
     key = key.toUpperCase()
-    plainText = space_remover(plainText.toUpperCase())
+    plainText = space_remover(plainText.toUpperCase().replace(/[^a-zA-Z]/g, ''))
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     const keyLength = key.length
     const plainLength = plainText.length

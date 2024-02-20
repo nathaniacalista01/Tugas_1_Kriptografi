@@ -4,6 +4,7 @@ import { affineCipher } from "./encrypt/affine";
 import { enigmaCipher } from "./encrypt/enigma";
 import { hillCipher } from "./encrypt/hill";
 import { playfair } from "./encrypt/playfair";
+import { superEncryption } from "./encrypt/super";
 import { vigenere } from "./encrypt/vigenere";
 import { vigenereExt } from "./encrypt/vigenereExt";
 interface EncryptInterface {
@@ -37,14 +38,13 @@ export const encrypt = ({
   console.log("ini ext",extension)
   switch (algorithm) {
     case "vigenere":
-      // Enter function for vignere
-      return vigenere({ isStandard: true, key, plainText });
+      return vigenere({isStandard:true, key, plainText});
     case "varian-vigenere":
       return vigenere({ isStandard: false, key, plainText });
     case "extended-vigenere":
-      return vigenereExt({ key, plainText, isFile: false });
+      return vigenereExt({key, plainText});
     case "super":
-      return "super";
+      return superEncryption({key, plainText});
     case "playfair":
       return playfair({ key, plainText: sanitized, extension });
     case "affine":
