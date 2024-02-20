@@ -34,3 +34,10 @@ export const removeXFromPlainText = (plainText: string) => {
 
   return cleanedText;
 };
+
+export const sanitized_text = (plainText: string) => {
+  const regex = /[^a-zA-Z]/g;
+
+  // Gunakan regex untuk mengganti semua karakter yang tidak cocok dengan string kosong
+  return plainText.replace(regex, "");
+};

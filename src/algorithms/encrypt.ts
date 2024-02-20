@@ -1,4 +1,7 @@
+import { RotorInterface } from "../type/engima.type";
+import { sanitized_text } from "../utils/plaintext.processing";
 import { affineCipher } from "./encrypt/affine";
+import { enigmaCipher } from "./encrypt/enigma";
 import { hillCipher } from "./encrypt/hill";
 import { playfair } from "./encrypt/playfair";
 import { vigenere } from "./encrypt/vigenere";
@@ -10,6 +13,10 @@ interface EncryptInterface {
   key?: string;
   plainText: string;
   algorithm: string;
+  firstRotor?: RotorInterface;
+  secondRotor?: RotorInterface;
+  thirdRotor?: RotorInterface;
+  extension? : string;
 }
 
 export const encrypt = ({
@@ -19,22 +26,45 @@ export const encrypt = ({
   key,
   plainText,
   algorithm,
+  firstRotor,
+  secondRotor,
+  thirdRotor,
+  extension
 }: EncryptInterface) => {
+  // console.log("Ini extension : ", extension)
+  const sanitized = sanitized_text(plainText);
+  console.log(sanitized);
+  console.log("ini ext",extension)
   switch (algorithm) {
     case "vigenere":
       return vigenere({isStandard:true, key, plainText});
     case "varian-vigenere":
-      return vigenere({isStandard:false, key, plainText});
+      return vigenere({ isStandard: false, key, plainText });
     case "extended-vigenere":
       return vigenereExt({key, plainText});
     case "super":
       return "super";
     case "playfair":
-      return playfair({ key, plainText });
+      return playfair({ key, plainText: sanitized, extension });
     case "affine":
-      return affineCipher({ slope, intercept, plainText });
+      return affineCipher({
+        slope,
+        intercept,
+        plainText: sanitized,
+        extension
+      });
     case "hill":
-      return hillCipher({ stringMatrix: matrix, plainText });
+      return hillCipher({
+        stringMatrix: matrix,
+        plainText: sanitized,
+      });
+    case "enigma":
+      return enigmaCipher({
+        plainText: sanitized,
+        firstRotor,
+        secondRotor,
+        thirdRotor,
+      });
     default:
       break;
   }

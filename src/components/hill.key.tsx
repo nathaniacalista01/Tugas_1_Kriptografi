@@ -54,7 +54,6 @@ const MatrixDisplay = ({ matrix, setMatrix }: MatrixDisplayProps) => {
               placeholder="Number of rows"
             />
           </FormControl>
-          
         </Box>
 
         <Button mt={4} colorScheme="blue" type="submit">

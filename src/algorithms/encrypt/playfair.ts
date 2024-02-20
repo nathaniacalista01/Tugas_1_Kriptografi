@@ -1,18 +1,21 @@
 import { PlayfairMatrix } from "../../type/playfair.type";
 import { bigramsConverter } from "../../utils/plaintext.processing";
-import { duplicate_remover, space_remover } from "../../utils/remover";
+import { duplicate_remover } from "../../utils/remover";
 
 interface PlayfairInterface {
   key?: string;
   plainText: string;
+  extension?: string;
 }
 
-export const playfair = ({ key = "", plainText }: PlayfairInterface) => {
+export const playfair = ({
+  key = "",
+  plainText,
+  extension,
+}: PlayfairInterface) => {
   const removed_duplicate_key = duplicate_remover(key.toUpperCase());
   const playfairMatrix = new PlayfairMatrix(removed_duplicate_key);
-  const bigrams = bigramsConverter(
-    space_remover(plainText.toUpperCase())
-  );
+  const bigrams = bigramsConverter(plainText);
   const descryptBigrams = [];
   for (const bigram of bigrams) {
     let decrypt;
@@ -32,6 +35,8 @@ export const playfair = ({ key = "", plainText }: PlayfairInterface) => {
     descryptBigrams.push(decrypt);
   }
   const result = descryptBigrams.map((bigram) => bigram.join("")).join("");
-
+  if(extension){
+    return extension + ";;;" + result
+  }
   return result;
 };
