@@ -1,10 +1,10 @@
 import { RotorInterface } from "../type/engima.type";
+import { sanitized_text } from "../utils/plaintext.processing";
 import { affineCipher } from "./encrypt/affine";
 import { enigmaCipher } from "./encrypt/enigma";
 import { hillCipher } from "./encrypt/hill";
 import { playfair } from "./encrypt/playfair";
 import { vigenere } from "./encrypt/vigenere";
-
 
 interface EncryptInterface {
   matrix?: string[][];
@@ -29,6 +29,8 @@ export const encrypt = ({
   secondRotor,
   thirdRotor,
 }: EncryptInterface) => {
+  const sanitized = sanitized_text(plainText);
+  console.log(sanitized);
   switch (algorithm) {
     case "vigenere":
       // Enter function for vignere
@@ -40,13 +42,25 @@ export const encrypt = ({
     case "super":
       return "super";
     case "playfair":
-      return playfair({ key, plainText });
+      return playfair({ key, plainText: sanitized });
     case "affine":
-      return affineCipher({ slope, intercept, plainText });
+      return affineCipher({
+        slope,
+        intercept,
+        plainText: sanitized,
+      });
     case "hill":
-      return hillCipher({ stringMatrix: matrix, plainText });
+      return hillCipher({
+        stringMatrix: matrix,
+        plainText: sanitized,
+      });
     case "enigma":
-      return enigmaCipher({ plainText, firstRotor, secondRotor, thirdRotor });
+      return enigmaCipher({
+        plainText: sanitized,
+        firstRotor,
+        secondRotor,
+        thirdRotor,
+      });
     default:
       break;
   }

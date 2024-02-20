@@ -1,6 +1,6 @@
 import { PlayfairMatrix } from "../../type/playfair.type";
 import { bigramsConverter } from "../../utils/plaintext.processing";
-import { duplicate_remover, space_remover } from "../../utils/remover";
+import { duplicate_remover } from "../../utils/remover";
 
 interface PlayfairInterface {
   key?: string;
@@ -10,9 +10,7 @@ interface PlayfairInterface {
 export const playfair = ({ key = "", plainText }: PlayfairInterface) => {
   const removed_duplicate_key = duplicate_remover(key.toUpperCase());
   const playfairMatrix = new PlayfairMatrix(removed_duplicate_key);
-  let sanitized_text = space_remover(plainText.toUpperCase());
-  sanitized_text = sanitized_text.replace(/[^a-zA-Z ]/g, "");
-  const bigrams = bigramsConverter(sanitized_text);
+  const bigrams = bigramsConverter(plainText);
   const descryptBigrams = [];
   for (const bigram of bigrams) {
     let decrypt;
