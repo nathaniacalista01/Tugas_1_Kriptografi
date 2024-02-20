@@ -39,7 +39,7 @@ export const decrypt = ({
     case "varian-vigenere":
       return decryptVigenere({ isStandard: false, key, decryptText });
     case "extended-vigenere":
-        return decryptVigenereExt({key, decryptText, isFile: false})
+      return decryptVigenereExt({ key, decryptText, isFile: false });
     case "playfair":
       return playfairDecrypt({ key, decryptText });
     case "affine":

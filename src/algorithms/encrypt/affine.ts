@@ -4,18 +4,20 @@ interface AffineCipherProps {
   slope?: number;
   intercept?: number;
   plainText: string;
+  extension?: string;
 }
 
 export const affineCipher = ({
   slope = 0,
   intercept = 0,
   plainText,
+  extension,
 }: AffineCipherProps) => {
   let cipher = "";
   const text = space_remover(plainText)
     .toUpperCase()
     .replace(/[^A-Z]/g, "");
-    
+
   console.log("Ini text : ", text);
   for (let i = 0; i < text.length; i++) {
     let charCode = plainText.charCodeAt(i);
@@ -26,6 +28,10 @@ export const affineCipher = ({
       charCode = ((slope * (charCode - 97) + intercept) % 26) + 97;
       cipher += String.fromCharCode(charCode);
     }
+  }
+  if (extension) {
+    console.log("Ada extension")
+    return cipher + "." + extension;
   }
   return cipher;
 };

@@ -49,7 +49,23 @@ function App() {
       .map(() => Array(Number(0)).fill(""))
   );
   const [file, setFile] = useState<File | null>();
+  const [extension, setExtension] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const handleDecrypt = () => {
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsText(file);
+      reader.onload = () => {
+        // Get extension type
+        // console.log("Ini type : ", file.name.split(".")[1]);
+        if (reader.result) {
+          const text = reader.result;
+          setPlainText(text as string);
+        } else {
+          setErrorMessage("File can't be read, please check again your file");
+        }
+      };
+    }
     const result = decrypt({
       matrix,
       slope,
@@ -68,9 +84,17 @@ function App() {
       const reader = new FileReader();
       reader.readAsText(file);
       reader.onload = () => {
-        const text = reader.result;
-        console.log("ini text : ", text);
-        setPlainText(text as string);
+        // Get extension type
+        // console.log("Ini type : ", file.name.split(".")[1]);
+        if (file.name.split(".").length > 1) {
+          setExtension(file.name.split(".")[1]);
+        }
+        if (reader.result) {
+          const text = reader.result;
+          setPlainText(text as string);
+        } else {
+          setErrorMessage("File can't be read, please check again your file");
+        }
       };
     }
     const result = encrypt({
@@ -83,6 +107,7 @@ function App() {
       firstRotor,
       secondRotor,
       thirdRotor,
+      extension,
     });
     setResult(result ? result : "");
   };
@@ -91,13 +116,37 @@ function App() {
       console.error("Result is not a string.");
       return;
     }
+    const parts = result.split(".");
 
-    const blob = new Blob([result], { type: "application/octet-stream" });
-    const fileURL = URL.createObjectURL(blob);
+    // Periksa apakah split berhasil
+    let fileName;
+    let fileURL;
+    let blob;
+    if (parts.length > 1) {
+      const extension = parts[1];
+      const content = parts[0];
+
+      // Gabungkan content dengan extension untuk nama file
+      fileName = `data.${extension}`;
+
+      // Buat blob dengan content dan type sesuai extension
+      blob = new Blob([content], {
+        type: "application/octet-stream",
+      });
+
+      // Lanjutkan proses download seperti sebelumnya
+      fileURL = URL.createObjectURL(blob);
+      // ... (your existing download logic using fileURL)
+    } else {
+      // Default ke .bin jika split gagal
+      fileName = "data.bin";
+      blob = new Blob([result], { type: "application/octet-stream" });
+      fileURL = URL.createObjectURL(blob);
+    }
 
     const tempLink = document.createElement("a");
     tempLink.href = fileURL;
-    tempLink.setAttribute("download", "data.bin");
+    tempLink.setAttribute("download", fileName);
     document.body.appendChild(tempLink);
     tempLink.click();
 
@@ -217,14 +266,17 @@ function App() {
               onChange={(e) => setPlainText(e.target.value)}
             />
           ) : (
-            <Input
-              type="file"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                if (e.target.files && e.target.files.length > 0) {
-                  setFile(e.target.files[0]);
-                }
-              }}
-            />
+            <>
+              <Input
+                type="file"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  if (e.target.files && e.target.files.length > 0) {
+                    setFile(e.target.files[0]);
+                  }
+                }}
+              />
+              {errorMessage && <Text color={"red"}>{errorMessage}</Text>}
+            </>
           )}
         </FormControl>
         <FormControl>

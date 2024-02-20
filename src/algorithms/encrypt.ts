@@ -16,6 +16,7 @@ interface EncryptInterface {
   firstRotor?: RotorInterface;
   secondRotor?: RotorInterface;
   thirdRotor?: RotorInterface;
+  extension? : string;
 }
 
 export const encrypt = ({
@@ -28,9 +29,12 @@ export const encrypt = ({
   firstRotor,
   secondRotor,
   thirdRotor,
+  extension
 }: EncryptInterface) => {
+  // console.log("Ini extension : ", extension)
   const sanitized = sanitized_text(plainText);
   console.log(sanitized);
+  console.log("ini ext",extension)
   switch (algorithm) {
     case "vigenere":
       // Enter function for vignere
@@ -38,16 +42,17 @@ export const encrypt = ({
     case "varian-vigenere":
       return vigenere({ isStandard: false, key, plainText });
     case "extended-vigenere":
-      return vigenereExt({key, plainText, isFile: false});
+      return vigenereExt({ key, plainText, isFile: false });
     case "super":
       return "super";
     case "playfair":
-      return playfair({ key, plainText: sanitized });
+      return playfair({ key, plainText: sanitized, extension });
     case "affine":
       return affineCipher({
         slope,
         intercept,
         plainText: sanitized,
+        extension
       });
     case "hill":
       return hillCipher({
