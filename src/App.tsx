@@ -20,7 +20,7 @@ import { decrypt } from "./algorithms/decrypt";
 
 function App() {
   const [type, setType] = useState("text");
-  const [plainText, setPlainText] = useState("");
+  const [plainText, setPlainText] = useState<string>("");
   const [algorithm, setAlgorithm] = useState("vignere");
   const [key, setKey] = useState("");
   const [result, setResult] = useState("");
@@ -32,7 +32,7 @@ function App() {
       .fill("")
       .map(() => Array(Number(0)).fill(""))
   );
-
+  const [file, setFile] = useState<File | null>();
   const handleDecrypt = () => {
     const result = decrypt({
       matrix,
@@ -45,6 +45,15 @@ function App() {
     setResult(result ? result : "");
   };
   const handleEncrypt = () => {
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsText(file);
+      reader.onload = () => {
+        const text = reader.result;
+        console.log("ini text : ",text)
+        setPlainText(text as string);
+      };
+    }
     const result = encrypt({
       matrix,
       slope,
@@ -53,10 +62,10 @@ function App() {
       plainText,
       algorithm,
     });
+    console.log("ini result :", result)
     setResult(result ? result : "");
   };
   const saveToBinaryFile = (): void => {
-    // Ensure 'result' is a string before proceeding
     if (typeof result !== "string") {
       console.error("Result is not a string.");
       return;
@@ -68,12 +77,16 @@ function App() {
     const tempLink = document.createElement("a");
     tempLink.href = fileURL;
     tempLink.setAttribute("download", "data.bin");
-    document.body.appendChild(tempLink); 
+    document.body.appendChild(tempLink);
     tempLink.click();
 
     URL.revokeObjectURL(fileURL);
     document.body.removeChild(tempLink);
   };
+
+  // const handleFile = () => {
+
+  // };
 
   const handleSlopeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSlope(Number(event.target.value));
@@ -137,7 +150,14 @@ function App() {
               onChange={(e) => setPlainText(e.target.value)}
             />
           ) : (
-            <Input type="file" />
+            <Input
+              type="file"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                if (e.target.files && e.target.files.length > 0) {
+                  setFile(e.target.files[0]);
+                }
+              }}
+            />
           )}
         </FormControl>
         <FormControl>

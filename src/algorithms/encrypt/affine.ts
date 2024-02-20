@@ -13,10 +13,16 @@ export const affineCipher = ({
 }: AffineCipherProps) => {
   let cipher = "";
   const text = space_remover(plainText).toUpperCase();
-  for (const char of text) {
-    const charCode =
-      ((slope * (char.charCodeAt(0) - 65) + intercept) % 26) + 65;
-    cipher += String.fromCharCode(charCode);
+  console.log("INi text : ", text);
+  for (let i = 0; i < text.length; i++) {
+    let charCode = plainText.charCodeAt(i);
+    if (charCode >= 65 && charCode <= 90) {
+      charCode = ((slope * (charCode - 65) + intercept) % 26) + 65;
+      cipher += String.fromCharCode(charCode);
+    } else if (charCode >= 97 && charCode <= 122) {
+      charCode = ((slope * (charCode - 97) + intercept) % 26) + 97;
+      cipher += String.fromCharCode(charCode);
+    } 
   }
   return cipher;
 };
