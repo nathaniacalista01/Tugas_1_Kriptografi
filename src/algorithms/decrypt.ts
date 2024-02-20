@@ -1,8 +1,13 @@
 import { decryptAffine } from "./decrypt/affine";
+
 import { decryptVigenere } from "./decrypt/vigenere";
+
+import { decryptHill } from "./decrypt/hill";
+
 import { playfairDecrypt } from "./decrypt/playfair";
 
 interface DecryptInterface {
+  matrix?: string[][];
   slope?: number;
   intercept?: number;
   key?: string;
@@ -11,6 +16,7 @@ interface DecryptInterface {
 }
 
 export const decrypt = ({
+  matrix,
   slope,
   intercept,
   key,
@@ -27,5 +33,7 @@ export const decrypt = ({
       return playfairDecrypt({ key, decryptText });
     case "affine":
       return decryptAffine({ slope, intercept, decryptText });
+    case "hill":
+      return decryptHill({ stringMatrix: matrix, decryptText });
   }
 };

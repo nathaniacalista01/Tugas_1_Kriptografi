@@ -35,6 +35,7 @@ function App() {
 
   const handleDecrypt = () => {
     const result = decrypt({
+      matrix,
       slope,
       intercept,
       key,
@@ -53,6 +54,25 @@ function App() {
       algorithm,
     });
     setResult(result ? result : "");
+  };
+  const saveToBinaryFile = (): void => {
+    // Ensure 'result' is a string before proceeding
+    if (typeof result !== "string") {
+      console.error("Result is not a string.");
+      return;
+    }
+
+    const blob = new Blob([result], { type: "application/octet-stream" });
+    const fileURL = URL.createObjectURL(blob);
+
+    const tempLink = document.createElement("a");
+    tempLink.href = fileURL;
+    tempLink.setAttribute("download", "data.bin");
+    document.body.appendChild(tempLink); 
+    tempLink.click();
+
+    URL.revokeObjectURL(fileURL);
+    document.body.removeChild(tempLink);
   };
 
   const handleSlopeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -185,6 +205,9 @@ function App() {
               Decrypt
             </Button>
           )}
+          <Button colorScheme="green" onClick={saveToBinaryFile}>
+            Save to File
+          </Button>
         </ButtonGroup>
       </Box>
     </Box>
