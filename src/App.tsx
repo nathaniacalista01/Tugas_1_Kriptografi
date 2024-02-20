@@ -18,6 +18,8 @@ import { encrypt } from "./algorithms/encrypt";
 import AffineCipherForm from "./components/affine.key";
 import MatrixDisplay from "./components/hill.key";
 import { decrypt } from "./algorithms/decrypt";
+import EnigmaKey from "./components/enigma.key";
+import { isRotorValid } from "./utils/rotor";
 
 function App() {
   const [type, setType] = useState("text");
@@ -29,6 +31,18 @@ function App() {
   const [intercept, setIntercept] = useState<number | undefined>();
   const [value, setValue] = useState("encrypt");
   const [isDisabled, setIsDisabled] = useState(false);
+  const [firstRotor, setFirstRotor] = useState({
+    innerRing: "",
+    initialPosition: "",
+  });
+  const [secondRotor, setSecondRotor] = useState({
+    innerRing: "",
+    initialPosition: "",
+  });
+  const [thirdRotor, setThirdRotor] = useState({
+    innerRing: "",
+    initialPosition: "",
+  });
   const [matrix, setMatrix] = useState<string[][]>(
     Array(Number(0))
       .fill("")
@@ -63,8 +77,10 @@ function App() {
       key,
       plainText,
       algorithm,
+      firstRotor,
+      secondRotor,
+      thirdRotor,
     });
-    console.log("ini result :", result);
     setResult(result ? result : "");
   };
   const saveToBinaryFile = (): void => {
@@ -103,6 +119,15 @@ function App() {
         case "hill":
           setIsDisabled(matrix.length <= 0);
           break;
+        case "enigma":
+          setIsDisabled(
+            !(
+              isRotorValid(firstRotor) &&
+              isRotorValid(secondRotor) &&
+              isRotorValid(thirdRotor)
+            )
+          );
+          break;
       }
     }
   };
@@ -125,7 +150,16 @@ function App() {
 
   useEffect(() => {
     checkEncrypt();
-  }, [plainText, slope, intercept, matrix, key]);
+  }, [
+    plainText,
+    slope,
+    intercept,
+    matrix,
+    key,
+    firstRotor,
+    secondRotor,
+    thirdRotor,
+  ]);
 
   return (
     <Box
@@ -166,7 +200,7 @@ function App() {
         </FormControl>
         <FormControl id="input-text">
           <FormLabel>
-            {value === "encrypt" ? "Input Text" : "Input Decrypt"}
+            {value === "encrypt" ? "Input Text" : "Encrypted Text"}
           </FormLabel>
           {type === "text" ? (
             <Input
@@ -206,8 +240,19 @@ function App() {
             <option value="super">Super Enkripsi</option>
             <option value="affine">Affine Cipher</option>
             <option value="hill">Hill Cipher</option>
+            <option value={"enigma"}>Enigma Cipher</option>
           </Select>
         </FormControl>
+        {algorithm === "enigma" && (
+          <EnigmaKey
+            firstRotor={firstRotor}
+            setFirstRotor={setFirstRotor}
+            secondRotor={secondRotor}
+            setSecondRotor={setSecondRotor}
+            thirdRotor={thirdRotor}
+            setThirdRotor={setThirdRotor}
+          />
+        )}
         {(algorithm === "vigenere" ||
           algorithm === "varian-vigenere" ||
           algorithm === "playfair") && (
