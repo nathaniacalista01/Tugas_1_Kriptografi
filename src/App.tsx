@@ -57,6 +57,9 @@ function App() {
       key,
       decryptText: plainText,
       algorithm,
+      firstRotor,
+      secondRotor,
+      thirdRotor,
     });
     setResult(result ? result : "");
   };

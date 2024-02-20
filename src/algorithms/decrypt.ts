@@ -5,6 +5,8 @@ import { decryptVigenere } from "./decrypt/vigenere";
 import { decryptHill } from "./decrypt/hill";
 
 import { playfairDecrypt } from "./decrypt/playfair";
+import { RotorInterface } from "../type/engima.type";
+import { decryptEnigma } from "./decrypt/enigma";
 
 interface DecryptInterface {
   matrix?: string[][];
@@ -13,6 +15,9 @@ interface DecryptInterface {
   key?: string;
   decryptText: string;
   algorithm: string;
+  firstRotor: RotorInterface;
+  secondRotor: RotorInterface;
+  thirdRotor: RotorInterface;
 }
 
 export const decrypt = ({
@@ -22,18 +27,28 @@ export const decrypt = ({
   key,
   decryptText,
   algorithm,
+  firstRotor,
+  secondRotor,
+  thirdRotor,
 }: DecryptInterface) => {
   switch (algorithm) {
     case "vigenere":
       // Enter function for vignere
-      return decryptVigenere({isStandard:true, key, decryptText});
+      return decryptVigenere({ isStandard: true, key, decryptText });
     case "varian-vigenere":
-      return decryptVigenere({isStandard:false, key, decryptText});
+      return decryptVigenere({ isStandard: false, key, decryptText });
     case "playfair":
       return playfairDecrypt({ key, decryptText });
     case "affine":
       return decryptAffine({ slope, intercept, decryptText });
     case "hill":
       return decryptHill({ stringMatrix: matrix, decryptText });
+    case "enigma":
+      return decryptEnigma({
+        decryptText,
+        firstRotor,
+        secondRotor,
+        thirdRotor,
+      });
   }
 };

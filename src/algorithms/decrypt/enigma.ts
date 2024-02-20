@@ -1,19 +1,18 @@
 import { EnigmaMachine, RotorInterface } from "../../type/engima.type";
-import { space_remover } from "../../utils/remover";
 
 interface EncryptEnigmaInterface {
-  plainText: string;
+  decryptText: string;
   firstRotor?: RotorInterface;
   secondRotor?: RotorInterface;
   thirdRotor?: RotorInterface;
 }
 
-export const enigmaCipher = ({
-  plainText,
+export const decryptEnigma = ({
+  decryptText,
   firstRotor,
   secondRotor,
   thirdRotor,
 }: EncryptEnigmaInterface) => {
   const enigmaMachine = new EnigmaMachine(firstRotor, secondRotor, thirdRotor);
-  return enigmaMachine.encrypt( space_remover(plainText.toUpperCase()));
+  return enigmaMachine.decrypt(decryptText);
 };

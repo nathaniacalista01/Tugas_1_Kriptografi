@@ -30,11 +30,16 @@ export class Rotor {
   public encrypt(input: number) {
     // Ubah plain text jadi angka
     const outerNumber = this.outerRing[input];
-    console.log("ini outer number : ", outerNumber);
     // console.log("Inii outer number : ", outerNumber);
     const innerNumber = this.innerRing.indexOf(outerNumber);
-    console.log("Ini innernumber : ", innerNumber);
+    // console.log("Ini innernumber : ", innerNumber);
     return innerNumber;
+  }
+
+  public decrypt(input: number) {
+    const innerNumber = this.innerRing[input];
+    const outerNumber = this.outerRing.indexOf(innerNumber);
+    return outerNumber;
   }
 
   public rotate() {
@@ -78,25 +83,21 @@ export class EnigmaMachine {
     let results = "";
     let currentRotor = 2;
     let rotationCount = 0;
+    console.log("Ini numbers : ", numbers);
     for (let i = 0; i < numbers.length; i++) {
       const number = numbers[i];
-      console.log("Start 1 : ");
       const firstResult = this.rotors[0].encrypt(number - 1);
-      console.log("Start 2 : ");
+      console.log("Start 1 : ", firstResult);
+
       const secondResult = this.rotors[1].encrypt(firstResult);
+      console.log("Start 2 : ", secondResult);
+
       console.log("Start 3 : ");
       const finalResult = this.rotors[2].encrypt(secondResult);
-      if (finalResult < 0) {
-        console.log("=============================");
-        console.log(numbers[i]);
-        console.log(this.rotors);
-        console.log(firstResult, secondResult, finalResult);
-        console.log("=============================");
-        break;
-      }
-    //   let result = numbers.map(num => String.fromCharCode(64 + num)).join('');
-    //   console.log(finalResult+1)
-      results += (String.fromCharCode(65 + finalResult));
+      console.log("Start 3 : ", finalResult);
+
+      //   console.log(finalResult+1)
+      results += String.fromCharCode(65 + finalResult);
       //   console.log(this.rotors[currentRotor]);
       //   console.log(this.rotors[currentRotor]);
 
@@ -116,6 +117,50 @@ export class EnigmaMachine {
         this.rotors[currentRotor].rotate();
       }
     }
-    console.log("Ini results : ", results);
+    // console.log("Ini results : ", results);
+    return results;
+  }
+
+  public decrypt(decryptText: string) {
+    const numbers = converStringRotorToNumber(decryptText);
+    let results = "";
+    let currentRotor = 2;
+    let rotationCount = 0;
+    console.log("Ini numbers : ", numbers);
+    for (let i = 0; i < numbers.length; i++) {
+      const number = numbers[i];
+      const firstResult = this.rotors[2].decrypt(number - 1);
+      console.log("Start 1 : ", firstResult);
+
+      const secondResult = this.rotors[1].decrypt(firstResult);
+      console.log("Start 2 : ", secondResult);
+
+      console.log("Start 3 : ");
+      const finalResult = this.rotors[0].decrypt(secondResult);
+      console.log("Start 3 : ", finalResult);
+
+      //   console.log(finalResult+1)
+      results += String.fromCharCode(65 + finalResult);
+      //   console.log(this.rotors[currentRotor]);
+      //   console.log(this.rotors[currentRotor]);
+
+      rotationCount += 1;
+      this.rotors[currentRotor].rotate();
+
+      if (rotationCount === 26) {
+        console.log("Ganti rotor");
+        console.log(this.rotors[currentRotor]);
+        if (currentRotor === 0) {
+          currentRotor = 2;
+        } else {
+          currentRotor -= 1;
+        }
+        rotationCount = 1;
+        console.log(this.rotors[currentRotor]);
+        this.rotors[currentRotor].rotate();
+      }
+    }
+    // console.log("Ini results : ", results);
+    return results;
   }
 }
