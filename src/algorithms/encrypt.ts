@@ -22,12 +22,11 @@ export const encrypt = ({
 }: EncryptInterface) => {
   switch (algorithm) {
     case "vigenere":
-      // Enter function for vignere
       return vigenere({isStandard:true, key, plainText});
     case "varian-vigenere":
       return vigenere({isStandard:false, key, plainText});
     case "extended-vigenere":
-      return vigenereExt({key, plainText, isFile: false});
+      return vigenereExt({key, plainText});
     case "super":
       return "super";
     case "playfair":
