@@ -258,7 +258,8 @@ function App() {
         )}
         {(algorithm === "vigenere" ||
           algorithm === "varian-vigenere" ||
-          algorithm === "playfair") && (
+          algorithm === "playfair" ||
+          algorithm === "extended-vigenere") && (
           <FormControl>
             <FormLabel>Key :</FormLabel>
             <Input
