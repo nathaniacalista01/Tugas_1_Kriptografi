@@ -3,9 +3,10 @@ interface VigenereInterface{
    isStandard: boolean;
    key?: string;
    plainText: string    
+   extension? : string
 }
 
-export const vigenere = ({isStandard, key = "", plainText}: VigenereInterface) => {
+export const vigenere = ({isStandard, key = "", plainText, extension}: VigenereInterface) => {
     key = key.toUpperCase()
     plainText = space_remover(plainText.toUpperCase().replace(/[^a-zA-Z]/g, ''))
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -37,6 +38,9 @@ export const vigenere = ({isStandard, key = "", plainText}: VigenereInterface) =
         const newLetter = alphabet[encryptedPos]
         encryptedText += newLetter
     }
-    console.log(encryptedText)
-    return encryptedText
+    if(extension){
+        return encryptedText + "." + extension
+    }else{
+        return encryptedText
+    }
 }

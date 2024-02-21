@@ -49,9 +49,9 @@ export const decrypt = ({
     case "varian-vigenere":
       return decryptVigenere({ isStandard: false, key, decryptText : content });
     case "extended-vigenere":
-      return decryptVigenereExt({ key, decryptText : content });
+      return decryptVigenereExt({ key, decryptText : content, extension});
     case "super":
-      return superDecryption({ key, decryptText : content });
+      return superDecryption({ key, decryptText : content, extension});
     case "playfair":
       return playfairDecrypt({ key, decryptText : content, extension });
     case "affine":

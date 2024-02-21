@@ -35,13 +35,13 @@ export const encrypt = ({
   const sanitized = sanitized_text(plainText);
   switch (algorithm) {
     case "vigenere":
-      return vigenere({ isStandard: true, key, plainText });
+      return vigenere({ isStandard: true, key, plainText, extension});
     case "varian-vigenere":
-      return vigenere({ isStandard: false, key, plainText });
+      return vigenere({ isStandard: false, key, plainText, extension });
     case "extended-vigenere":
-      return vigenereExt({ key, plainText });
+      return vigenereExt({ key, plainText, extension});
     case "super":
-      return superEncryption({ key, plainText });
+      return superEncryption({ key, plainText, extension});
     case "playfair":
       return playfair({ key, plainText: sanitized, extension });
     case "affine":

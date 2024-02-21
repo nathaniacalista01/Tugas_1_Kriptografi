@@ -100,6 +100,8 @@ function App() {
       extension,
     });
     setResult(result ? result : "");
+    console.log("testre");
+    console.log(value);
   };
   const saveToBinaryFile = (): void => {
     downloadFile(value, result, setErrorMessage);
@@ -196,26 +198,25 @@ function App() {
   useEffect(() => {
     if (file) {
       const reader = new FileReader();
-      reader.readAsText(file);
-      reader.onload = () => {
-        if (file) {
-          const reader = new FileReader();
-          reader.readAsText(file);
-          reader.onload = () => {
-            if (file.name.split(".").length > 1) {
-              setExtension(file.name.split(".")[1]);
-            }
-            if (reader.result) {
-              const text = reader.result;
-              setPlainText(text as string);
-            } else {
-              setErrorMessage(
-                "File can't be read, please check again your file"
-              );
-            }
-          };
-        }
-      };
+      if (file.name.split(".").length > 1) {
+        setExtension(file.name.split(".")[1]);
+      }
+      if (file.name.includes(".txt")) {
+        reader.readAsText(file);
+        reader.onload = () => {
+          const text = reader.result;
+          setPlainText(text as string);
+        };
+      } else {
+        reader.readAsArrayBuffer(file);
+        reader.onload = () => {
+          const arrBuffer = reader.result as ArrayBuffer;
+          const binaryString = new TextDecoder().decode(
+            new Uint8Array(arrBuffer)
+          );
+          setPlainText(binaryString);
+        };
+      }
     } else {
       setIsDisabled(false);
     }
