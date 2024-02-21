@@ -108,7 +108,6 @@ const EnigmaKey = ({
           <Select
             value={thirdRotor.initialPosition}
             onChange={(e) => {
-              console.log(e.target.value);
               setThirdRotor((prev) => ({
                 ...prev,
                 initialPosition: e.target.value,

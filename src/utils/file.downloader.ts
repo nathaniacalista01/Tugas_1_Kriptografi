@@ -11,27 +11,21 @@ export const downloadFile = (
   }
   const parts = result.split(".");
   let fileName, fileURL, blob;
-  if (method === "encrypt") {
+
+  if (parts.length > 1) {
+    const extension = parts[1];
+
+    fileName = `data.${extension}`;
+
+    blob = new Blob([result], {
+      type: "application/octet-stream",
+    });
+
+    fileURL = URL.createObjectURL(blob);
+  } else {
     fileName = "data.bin";
     blob = new Blob([result], { type: "application/octet-stream" });
     fileURL = URL.createObjectURL(blob);
-  } else {
-    if (parts.length > 1) {
-      const extension = parts[1];
-      const content = parts[0];
-
-      fileName = `data.${extension}`;
-
-      blob = new Blob([content], {
-        type: "application/octet-stream",
-      });
-
-      fileURL = URL.createObjectURL(blob);
-    } else {
-      fileName = "data.bin";
-      blob = new Blob([result], { type: "application/octet-stream" });
-      fileURL = URL.createObjectURL(blob);
-    }
   }
 
   const tempLink = document.createElement("a");

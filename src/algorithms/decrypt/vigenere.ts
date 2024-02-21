@@ -39,6 +39,5 @@ export const decryptVigenere = ({isStandard, key = "", decryptText}: VigenereDec
         }
     }
 
-    console.log(decryptedText)
     return decryptedText
 }
