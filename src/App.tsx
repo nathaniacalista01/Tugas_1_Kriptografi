@@ -62,20 +62,6 @@ function App() {
     }
   };
   const handleDecrypt = () => {
-    // if (file) {
-    //   const reader = new FileReader();
-    //   reader.readAsText(file);
-    //   reader.onload = () => {
-    //     // Get extension type
-    //     // console.log("Ini type : ", file.name.split(".")[1]);
-    //     if (reader.result) {
-    //       const text = reader.result;
-    //       setPlainText(text as string);
-    //     } else {
-    //       setErrorMessage("File can't be read, please check again your file");
-    //     }
-    //   };
-    // }
     const result = decrypt({
       matrix,
       slope,
@@ -125,7 +111,7 @@ function App() {
           setIsDisabled(!(slope && intercept));
           break;
         case "hill":
-          setIsDisabled(matrix.length <= 0);
+          setIsDisabled(matrix.length <= 0 || plainText === "");
           break;
         case "enigma":
           setIsDisabled(

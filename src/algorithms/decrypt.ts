@@ -50,7 +50,7 @@ export const decrypt = ({
     case "affine":
       return decryptAffine({ slope, intercept, decryptText, extension });
     case "hill":
-      return decryptHill({ stringMatrix: matrix, decryptText });
+      return decryptHill({ stringMatrix: matrix, decryptText, extension });
     case "enigma":
       return decryptEnigma({
         decryptText,
