@@ -36,8 +36,10 @@ export const decryptVigenere = ({isStandard, key = "", decryptText, extension}: 
 
     }else{
         for (let i = 0; i < cipherLength; i++){
-            const char = decryptText[i].toUpperCase();
-            const decryptedChar = String.fromCharCode((char.charCodeAt(0) - key[i].toUpperCase().charCodeAt(0) + 26) % 26 + 'A'.charCodeAt(0));
+            // const char = decryptText[i].toUpperCase();
+            const plainPosition = alphabet.indexOf(decryptText[i])
+            const keyPosition = alphabet.indexOf(newKey[i])
+            const decryptedChar = alphabet[((plainPosition - keyPosition + 26) % 26)];
             decryptedText += decryptedChar;
             newKey+=(decryptedChar);
         }
