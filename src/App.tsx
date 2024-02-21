@@ -20,6 +20,7 @@ import MatrixDisplay from "./components/hill.key";
 import { decrypt } from "./algorithms/decrypt";
 import EnigmaKey from "./components/enigma.key";
 import { isRotorValid } from "./utils/rotor";
+import { downloadFile } from "./utils/file.downloader";
 
 function App() {
   const [type, setType] = useState("text");
@@ -43,14 +44,23 @@ function App() {
     innerRing: "",
     initialPosition: "",
   });
-  const [matrix, setMatrix] = useState<string[][]>(
-    Array(Number(0))
-      .fill("")
-      .map(() => Array(Number(0)).fill(""))
-  );
+  const [matrix, setMatrix] = useState<string[][]>([[""], [""]]);
   const [file, setFile] = useState<File | null>();
   const [extension, setExtension] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  const reset = () => {
+    setFile(null);
+    setPlainText("");
+    setMatrix([[""], [""]]);
+    setErrorMessage("");
+    setExtension("");
+    setResult("");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
   const handleDecrypt = () => {
     if (file) {
       const reader = new FileReader();
@@ -80,23 +90,6 @@ function App() {
     setResult(result ? result : "");
   };
   const handleEncrypt = () => {
-    if (file) {
-      const reader = new FileReader();
-      reader.readAsText(file);
-      reader.onload = () => {
-        // Get extension type
-        // console.log("Ini type : ", file.name.split(".")[1]);
-        if (file.name.split(".").length > 1) {
-          setExtension(file.name.split(".")[1]);
-        }
-        if (reader.result) {
-          const text = reader.result;
-          setPlainText(text as string);
-        } else {
-          setErrorMessage("File can't be read, please check again your file");
-        }
-      };
-    }
     const result = encrypt({
       matrix,
       slope,
@@ -112,46 +105,7 @@ function App() {
     setResult(result ? result : "");
   };
   const saveToBinaryFile = (): void => {
-    if (typeof result !== "string") {
-      console.error("Result is not a string.");
-      return;
-    }
-    const parts = result.split(".");
-
-    // Periksa apakah split berhasil
-    let fileName;
-    let fileURL;
-    let blob;
-    if (parts.length > 1) {
-      const extension = parts[1];
-      const content = parts[0];
-
-      // Gabungkan content dengan extension untuk nama file
-      fileName = `data.${extension}`;
-
-      // Buat blob dengan content dan type sesuai extension
-      blob = new Blob([content], {
-        type: "application/octet-stream",
-      });
-
-      // Lanjutkan proses download seperti sebelumnya
-      fileURL = URL.createObjectURL(blob);
-      // ... (your existing download logic using fileURL)
-    } else {
-      // Default ke .bin jika split gagal
-      fileName = "data.bin";
-      blob = new Blob([result], { type: "application/octet-stream" });
-      fileURL = URL.createObjectURL(blob);
-    }
-
-    const tempLink = document.createElement("a");
-    tempLink.href = fileURL;
-    tempLink.setAttribute("download", fileName);
-    document.body.appendChild(tempLink);
-    tempLink.click();
-
-    URL.revokeObjectURL(fileURL);
-    document.body.removeChild(tempLink);
+    downloadFile(result, setErrorMessage);
   };
 
   const checkEncrypt = () => {
@@ -159,19 +113,11 @@ function App() {
       setIsDisabled(true);
     } else {
       switch (algorithm) {
-        case "vigenere":
-          setIsDisabled(key === "" || plainText === "");
-          break;
-        case "varian-vigenere":
-          setIsDisabled(key === "" || plainText === "");
-          break;
-        case "extended-vigenere":
-          setIsDisabled(key === "" || plainText === "");
-          break;
-        case "super":
-          setIsDisabled(key === "" || plainText === "");
-          break;
-        case "playfair":
+        case "vigenere" ||
+          "varian-vignere" ||
+          "extended-vignere" ||
+          "super" ||
+          "playfair":
           setIsDisabled(key === "" || plainText === "");
           break;
         case "affine":
@@ -195,18 +141,28 @@ function App() {
 
   const handleSlopeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSlope(Number(event.target.value));
+    setResult("");
   };
 
   const handleInterceptChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setIntercept(Number(event.target.value));
+    setResult("");
   };
 
   const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setPlainText("");
     setFile(null);
     setType(event.target.value);
+  };
+  const toBase64 = (str: string) => {
+    try {
+      return btoa(str);
+    } catch (e) {
+      setErrorMessage("Error in Base64 encoding");
+      return null;
+    }
   };
 
   useEffect(() => {
@@ -221,6 +177,38 @@ function App() {
     secondRotor,
     thirdRotor,
   ]);
+
+  useEffect(() => {
+    reset();
+  }, [type, value]);
+
+  useEffect(() => {
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsText(file);
+      reader.onload = () => {
+        if (file) {
+          const reader = new FileReader();
+          reader.readAsText(file);
+          reader.onload = () => {
+            if (file.name.split(".").length > 1) {
+              setExtension(file.name.split(".")[1]);
+            }
+            if (reader.result) {
+              const text = reader.result;
+              setPlainText(text as string);
+            } else {
+              setErrorMessage(
+                "File can't be read, please check again your file"
+              );
+            }
+          };
+        }
+      };
+    } else {
+      setIsDisabled(false);
+    }
+  }, [file]);
 
   return (
     <Box
@@ -239,26 +227,32 @@ function App() {
         w={"50vw"}
         gap={4}
       >
-        <FormControl>
-          <FormLabel>Input Type</FormLabel>
+        <FormLabel>Input Type</FormLabel>
+        <FormControl w={"100%"} display={"flex"} flexDir={"row"} gap={4}>
           <Select
             placeholder="Select your input type"
             size={"lg"}
             value={type}
             onChange={(e) => handleTypeChange(e)}
+            w={"50%"}
           >
             <option value="text">Text</option>
             <option value="file">File</option>
           </Select>
-        </FormControl>
-        <FormControl>
-          <RadioGroup onChange={setValue} value={value}>
+          <RadioGroup
+            onChange={setValue}
+            value={value}
+            w={"50%"}
+            display={"flex"}
+            alignItems={"center"}
+          >
             <Stack direction={"row"}>
               <Radio value="encrypt">Encrypt</Radio>
               <Radio value="decrypt">Decrypt</Radio>
             </Stack>
           </RadioGroup>
         </FormControl>
+
         <FormControl id="input-text">
           <FormLabel>
             {value === "encrypt" ? "Input Text" : "Encrypted Text"}
@@ -275,17 +269,15 @@ function App() {
               onChange={(e) => setPlainText(e.target.value)}
             />
           ) : (
-            <>
-              <Input
-                type="file"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  if (e.target.files && e.target.files.length > 0) {
-                    setFile(e.target.files[0]);
-                  }
-                }}
-              />
-              {errorMessage && <Text color={"red"}>{errorMessage}</Text>}
-            </>
+            <Input
+              type="file"
+              ref={fileInputRef}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                if (e.target.files && e.target.files.length > 0) {
+                  setFile(e.target.files[0]);
+                }
+              }}
+            />
           )}
         </FormControl>
         <FormControl>
@@ -336,7 +328,7 @@ function App() {
         )}
         {algorithm === "affine" && (
           <AffineCipherForm
-            slope={slope ? slope : 1}
+            slope={slope ? slope : 0}
             intercept={intercept ? intercept : 0}
             handleSlopeChange={handleSlopeChange}
             handleInterceptChange={handleInterceptChange}
@@ -347,8 +339,10 @@ function App() {
         )}
         {result && (
           <FormControl>
-            <FormLabel>Result</FormLabel>
+            <FormLabel>Result (Plain)</FormLabel>
             <Text>{result}</Text>
+            <FormLabel>Result (base 64)</FormLabel>
+            <Text>{toBase64(result)}</Text>
           </FormControl>
         )}
 
@@ -378,6 +372,7 @@ function App() {
             Save to File
           </Button>
         </ButtonGroup>
+        {errorMessage && <Text color={"red"}>{errorMessage}</Text>}
       </Box>
     </Box>
   );
