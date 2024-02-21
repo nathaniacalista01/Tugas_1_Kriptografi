@@ -72,7 +72,7 @@ function App() {
       firstRotor,
       secondRotor,
       thirdRotor,
-      extension
+      extension,
     });
     setResult(result ? result : "");
   };

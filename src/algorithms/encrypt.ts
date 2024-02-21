@@ -66,6 +66,7 @@ export const encrypt = ({
         firstRotor,
         secondRotor,
         thirdRotor,
+        extension
       });
     default:
       break;

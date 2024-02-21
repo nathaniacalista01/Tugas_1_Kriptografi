@@ -57,6 +57,7 @@ export const decrypt = ({
         firstRotor,
         secondRotor,
         thirdRotor,
+        extension
       });
   }
 };
