@@ -14,7 +14,6 @@ export const hillCipher = ({
   plainText,
   extension,
 }: HillCipherProps) => {
-  console.log("INi matrix :", stringMatrix, plainText);
   const normalizedText = plainText.replace(/\s+/g, "").toLowerCase();
   const numbers = convertPlainTextToNumber(normalizedText);
   const matrix = new HillMatrix(stringMatrix);

@@ -18,10 +18,14 @@ export const playfairDecrypt = ({
 }: PlayfairDecryptInterface) => {
   const removedDuplicateKey = duplicate_remover(key.toUpperCase());
   const playfairMatrix = new PlayfairMatrix(removedDuplicateKey);
-  const bigrams = bigramsConverter(space_remover(decryptText.toUpperCase()));
+  const bigrams = bigramsConverter(
+    space_remover(decryptText.replace("J", "I").toUpperCase())
+  );
+
   const plainTextBigrams = [];
   for (const bigram of bigrams) {
     let encrypt;
+    console.log(bigram[0], bigram[1]);
     if (playfairMatrix.isSameRow(bigram[0], bigram[1])) {
       encrypt = [
         playfairMatrix.decryptSameRow(bigram[0]),
@@ -38,8 +42,8 @@ export const playfairDecrypt = ({
     plainTextBigrams.push(encrypt);
   }
   const result = plainTextBigrams.map((bigram) => bigram.join("")).join("");
-  if(extension){
-    return removeXFromPlainText(result) + "." + extension
+  if (extension) {
+    return removeXFromPlainText(result) + "." + extension;
   }
   return removeXFromPlainText(result);
 };

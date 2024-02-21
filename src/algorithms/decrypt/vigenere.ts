@@ -26,9 +26,12 @@ export const decryptVigenere = ({isStandard, key = "", decryptText, extension}: 
         for (let i = 0; i < decryptText.length; i++){
             const plainPosition = alphabet.indexOf(decryptText[i])
             const keyPosition = alphabet.indexOf(newKey[i])
-            const encryptedPos = (plainPosition - keyPosition) % 26
+            const encryptedPos = (plainPosition - keyPosition + 26) % 26
+            console.log(encryptedPos)
             const newLetter = alphabet[encryptedPos]
             decryptedText += newLetter
+            console.log('testttt bro')
+            console.log(newLetter)
         }
 
     }else{

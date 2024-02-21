@@ -21,6 +21,7 @@ import { decrypt } from "./algorithms/decrypt";
 import EnigmaKey from "./components/enigma.key";
 import { downloadFile } from "./utils/file.downloader";
 import { RotorInterface } from "./type/engima.type";
+import { isMatrixValid } from "./utils/matrix.processing";
 
 function App() {
   const [type, setType] = useState("text");
@@ -53,7 +54,6 @@ function App() {
   const reset = () => {
     setFile(null);
     setPlainText("");
-    setMatrix([[""], [""]]);
     setErrorMessage("");
     setExtension("");
     setResult("");
@@ -62,6 +62,11 @@ function App() {
     }
   };
   const handleDecrypt = () => {
+    console.log("Masuk ahndle decertio");
+    if (algorithm === "hill" && !isMatrixValid(matrix)) {
+      setErrorMessage("Matrix is not valid");
+      return;
+    }
     const result = decrypt({
       matrix,
       slope,
@@ -72,17 +77,20 @@ function App() {
       firstRotor,
       secondRotor,
       thirdRotor,
-      extension,
     });
     setResult(result ? result : "");
   };
   const handleEncrypt = () => {
+    if (algorithm === "hill" && !isMatrixValid(matrix)) {
+      setErrorMessage("Matrix is not valid");
+      return;
+    }
     const result = encrypt({
       matrix,
       slope,
       intercept,
       key,
-      plainText,
+      plainText: plainText.replace(/[^A-Za-z]/g, ""),
       algorithm,
       firstRotor,
       secondRotor,
@@ -90,9 +98,11 @@ function App() {
       extension,
     });
     setResult(result ? result : "");
+    console.log("testre");
+    console.log(value);
   };
   const saveToBinaryFile = (): void => {
-    downloadFile(result, setErrorMessage);
+    downloadFile(value, result, setErrorMessage);
   };
 
   const checkRotor = (rotor: RotorInterface) => {
@@ -107,7 +117,6 @@ function App() {
       setErrorMessage("");
     }
     return result;
-    // return cleanInnerRing.length === 26 && new Set(cleanInnerRing).size === 26;
   };
 
   const checkEncrypt = () => {

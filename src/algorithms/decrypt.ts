@@ -33,31 +33,40 @@ export const decrypt = ({
   firstRotor,
   secondRotor,
   thirdRotor,
-  extension,
 }: DecryptInterface) => {
+  let extension;
+  let content = decryptText;
+  const parts = decryptText.split(".");
+  if (parts.length > 1) {
+    extension = parts[1];
+    content  = parts[0]
+  }
+  
+  console.log("Ini extension : ", extension);
+
   switch (algorithm) {
     case "vigenere":
       // Enter function for vignere
-      return decryptVigenere({ isStandard: true, key, decryptText, extension });
+      return decryptVigenere({ isStandard: true, key, decryptText : content });
     case "varian-vigenere":
-      return decryptVigenere({ isStandard: false, key, decryptText, extension });
+      return decryptVigenere({ isStandard: false, key, decryptText : content });
     case "extended-vigenere":
-      return decryptVigenereExt({ key, decryptText, extension });
+      return decryptVigenereExt({ key, decryptText : content, extension});
     case "super":
-      return superDecryption({ key, decryptText, extension });
+      return superDecryption({ key, decryptText : content, extension});
     case "playfair":
-      return playfairDecrypt({ key, decryptText, extension });
+      return playfairDecrypt({ key, decryptText : content, extension });
     case "affine":
-      return decryptAffine({ slope, intercept, decryptText, extension });
+      return decryptAffine({ slope, intercept, decryptText : content, extension });
     case "hill":
-      return decryptHill({ stringMatrix: matrix, decryptText, extension });
+      return decryptHill({ stringMatrix: matrix, decryptText : content, extension });
     case "enigma":
       return decryptEnigma({
         decryptText,
         firstRotor,
         secondRotor,
         thirdRotor,
-        extension
+        extension,
       });
   }
 };
