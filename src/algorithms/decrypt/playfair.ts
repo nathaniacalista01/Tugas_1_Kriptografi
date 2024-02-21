@@ -8,11 +8,13 @@ import { duplicate_remover, space_remover } from "../../utils/remover";
 interface PlayfairDecryptInterface {
   key?: string;
   decryptText: string;
+  extension? : string;
 }
 
 export const playfairDecrypt = ({
   key = "",
   decryptText,
+  extension
 }: PlayfairDecryptInterface) => {
   const removedDuplicateKey = duplicate_remover(key.toUpperCase());
   const playfairMatrix = new PlayfairMatrix(removedDuplicateKey);
@@ -36,5 +38,8 @@ export const playfairDecrypt = ({
     plainTextBigrams.push(encrypt);
   }
   const result = plainTextBigrams.map((bigram) => bigram.join("")).join("");
+  if(extension){
+    return removeXFromPlainText(result) + "." + extension
+  }
   return removeXFromPlainText(result);
 };

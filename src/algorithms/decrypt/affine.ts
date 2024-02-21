@@ -4,15 +4,17 @@ interface DecryptAffineCipherProps {
   slope?: number;
   intercept?: number;
   decryptText: string;
+  extension?: string;
 }
 
 export const decryptAffine = ({
   slope = 0,
   intercept = 0,
   decryptText,
+  extension,
 }: DecryptAffineCipherProps) => {
   let plainText = "";
-  console.log("Ini decrtp", decryptText);
+  console.log("Ini decrtp", decryptText, extension);
   const decrypt = space_remover(decryptText).toUpperCase();
   let a_inverse = 0;
   for (let i = 0; i < 26; i++) {
@@ -26,6 +28,8 @@ export const decryptAffine = ({
     );
     plainText += number;
   }
-  console.log("Ini plain text : ", plainText);
+  if (extension) {
+    return plainText + "." + extension;
+  }
   return plainText;
 };

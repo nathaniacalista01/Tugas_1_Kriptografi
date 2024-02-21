@@ -18,7 +18,6 @@ export const affineCipher = ({
     .toUpperCase()
     .replace(/[^A-Z]/g, "");
 
-  console.log("Ini text : ", text);
   for (let i = 0; i < text.length; i++) {
     let charCode = plainText.charCodeAt(i);
     if (charCode >= 65 && charCode <= 90) {
@@ -30,7 +29,6 @@ export const affineCipher = ({
     }
   }
   if (extension) {
-    console.log("Ada extension")
     return cipher + "." + extension;
   }
   return cipher;

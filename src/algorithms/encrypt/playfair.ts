@@ -15,7 +15,8 @@ export const playfair = ({
 }: PlayfairInterface) => {
   const removed_duplicate_key = duplicate_remover(key.toUpperCase());
   const playfairMatrix = new PlayfairMatrix(removed_duplicate_key);
-  const bigrams = bigramsConverter(plainText);
+
+  const bigrams = bigramsConverter(plainText.replace("J", "I"));
   const descryptBigrams = [];
   for (const bigram of bigrams) {
     let decrypt;
@@ -35,8 +36,8 @@ export const playfair = ({
     descryptBigrams.push(decrypt);
   }
   const result = descryptBigrams.map((bigram) => bigram.join("")).join("");
-  if(extension){
-    return extension + ";;;" + result
+  if (extension) {
+    return result + "." + extension;
   }
   return result;
 };

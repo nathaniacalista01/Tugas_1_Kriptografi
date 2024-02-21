@@ -20,6 +20,7 @@ interface DecryptInterface {
   firstRotor: RotorInterface;
   secondRotor: RotorInterface;
   thirdRotor: RotorInterface;
+  extension?: string;
 }
 
 export const decrypt = ({
@@ -32,6 +33,7 @@ export const decrypt = ({
   firstRotor,
   secondRotor,
   thirdRotor,
+  extension,
 }: DecryptInterface) => {
   switch (algorithm) {
     case "vigenere":
@@ -40,13 +42,13 @@ export const decrypt = ({
     case "varian-vigenere":
       return decryptVigenere({ isStandard: false, key, decryptText });
     case "extended-vigenere":
-      return decryptVigenereExt({key, decryptText})
+      return decryptVigenereExt({ key, decryptText });
     case "super":
-      return superDecryption({key, decryptText})
+      return superDecryption({ key, decryptText });
     case "playfair":
-      return playfairDecrypt({ key, decryptText });
+      return playfairDecrypt({ key, decryptText, extension });
     case "affine":
-      return decryptAffine({ slope, intercept, decryptText });
+      return decryptAffine({ slope, intercept, decryptText, extension });
     case "hill":
       return decryptHill({ stringMatrix: matrix, decryptText });
     case "enigma":
