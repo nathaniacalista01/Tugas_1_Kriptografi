@@ -16,7 +16,8 @@ export const decryptEnigma = ({
   extension,
 }: EncryptEnigmaInterface) => {
   const enigmaMachine = new EnigmaMachine(firstRotor, secondRotor, thirdRotor);
-  const result = enigmaMachine.decrypt(decryptText);
+  const content =  decryptText.split(".")[0]
+  const result = enigmaMachine.decrypt(content);
   if (extension) {
     return result + "." + extension;
   }

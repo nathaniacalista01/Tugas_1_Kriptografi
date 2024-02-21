@@ -46,7 +46,6 @@ export const cofactor = (matrix: number[][], row: number, col: number) => {
     .filter((_, r) => r !== row)
     .map((row) => row.filter((_, c) => c !== col));
   const result = Math.pow(-1, row + col) * math.det(subMatrix);
-  // console.log("Ini result :", result);
   return result;
 };
 
@@ -59,7 +58,6 @@ export const adjugateMatrix = (matrix: number[][]) => {
   }
   for (let i = 0; i < n; i++) {
     for (let j = 0; j < n; j++) {
-      // console.log("Ini cofactor", cofactor(matrix, i, j));
       adj[j][i] = cofactor(matrix, i, j);
     }
   }
@@ -68,14 +66,11 @@ export const adjugateMatrix = (matrix: number[][]) => {
 
 export const matrixInverse = (matrix: number[][]) => {
   const det = matrixDeterminant(matrix);
-  // console.log("ini det : ", math.det(matrix));
   const detInv = getModInverse(det % 26 > 0 ? det % 26 : (det % 26) + 26);
-  // console.log("Ini det inv : ", detInv);
   if (detInv === null) {
     throw new Error("Matrix is not invertible under modulo 26");
   }
   const adj = adjugateMatrix(matrix);
-  // console.log("Ini adjugate : ", adj);
   const n = matrix.length;
   const invMatrix = new Array(n).fill(0).map(() => new Array(n).fill(0));
   for (let i = 0; i < n; i++) {

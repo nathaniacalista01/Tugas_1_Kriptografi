@@ -32,7 +32,6 @@ export const encrypt = ({
   thirdRotor,
   extension,
 }: EncryptInterface) => {
-  // console.log("Ini extension : ", extension)
   const sanitized = sanitized_text(plainText);
   switch (algorithm) {
     case "vigenere":

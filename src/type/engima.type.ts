@@ -9,9 +9,7 @@ export class Rotor {
   private outerRing: number[];
   private innerRing: number[];
   public constructor(rotor: RotorInterface) {
-    // console.log(rotor.outerRing)
     this.innerRing = converStringRotorToNumber(rotor.innerRing.toUpperCase());
-    // console.log("Ini awal2 outer ring : ", this.outerRing)
     const initialPositionNumber =
       rotor.initialPosition.toUpperCase().charCodeAt(0) - "A".charCodeAt(0) + 1;
 
@@ -24,15 +22,11 @@ export class Rotor {
     for (let i = 1; i < initialPositionNumber; i++) {
       this.outerRing.push(i);
     }
-    console.log("Selesai construct rotor : ", this.outerRing, this.innerRing);
   }
 
   public encrypt(input: number) {
-    // Ubah plain text jadi angka
     const outerNumber = this.outerRing[input];
-    // console.log("Inii outer number : ", outerNumber);
     const innerNumber = this.innerRing.indexOf(outerNumber);
-    // console.log("Ini innernumber : ", innerNumber);
     return innerNumber;
   }
 
@@ -43,8 +37,6 @@ export class Rotor {
   }
 
   public rotate() {
-    console.log("======= BEFORE ==========");
-    console.log(this.outerRing, this.innerRing);
     const outerNumber = this.outerRing.pop();
     const innerNumber = this.innerRing.pop();
 
@@ -52,8 +44,6 @@ export class Rotor {
       this.outerRing.unshift(outerNumber);
       this.innerRing.unshift(innerNumber);
     }
-    console.log("=======AFTER============");
-    console.log(this.outerRing, this.innerRing);
   }
 }
 
@@ -83,41 +73,29 @@ export class EnigmaMachine {
     let results = "";
     let currentRotor = 2;
     let rotationCount = 0;
-    console.log("Ini numbers : ", numbers);
     for (let i = 0; i < numbers.length; i++) {
       const number = numbers[i];
       const firstResult = this.rotors[0].encrypt(number - 1);
-      console.log("Start 1 : ", firstResult);
 
       const secondResult = this.rotors[1].encrypt(firstResult);
-      console.log("Start 2 : ", secondResult);
 
-      console.log("Start 3 : ");
       const finalResult = this.rotors[2].encrypt(secondResult);
-      console.log("Start 3 : ", finalResult);
 
-      //   console.log(finalResult+1)
       results += String.fromCharCode(65 + finalResult);
-      //   console.log(this.rotors[currentRotor]);
-      //   console.log(this.rotors[currentRotor]);
 
       rotationCount += 1;
       this.rotors[currentRotor].rotate();
 
       if (rotationCount === 26) {
-        console.log("Ganti rotor");
-        console.log(this.rotors[currentRotor]);
         if (currentRotor === 0) {
           currentRotor = 2;
         } else {
           currentRotor -= 1;
         }
         rotationCount = 1;
-        console.log(this.rotors[currentRotor]);
         this.rotors[currentRotor].rotate();
       }
     }
-    // console.log("Ini results : ", results);
     return results;
   }
 
@@ -126,41 +104,29 @@ export class EnigmaMachine {
     let results = "";
     let currentRotor = 2;
     let rotationCount = 0;
-    console.log("Ini numbers : ", numbers);
     for (let i = 0; i < numbers.length; i++) {
       const number = numbers[i];
       const firstResult = this.rotors[2].decrypt(number - 1);
-      console.log("Start 1 : ", firstResult);
 
       const secondResult = this.rotors[1].decrypt(firstResult);
-      console.log("Start 2 : ", secondResult);
 
-      console.log("Start 3 : ");
       const finalResult = this.rotors[0].decrypt(secondResult);
-      console.log("Start 3 : ", finalResult);
 
-      //   console.log(finalResult+1)
       results += String.fromCharCode(65 + finalResult);
-      //   console.log(this.rotors[currentRotor]);
-      //   console.log(this.rotors[currentRotor]);
-
+      
       rotationCount += 1;
       this.rotors[currentRotor].rotate();
 
       if (rotationCount === 26) {
-        console.log("Ganti rotor");
-        console.log(this.rotors[currentRotor]);
         if (currentRotor === 0) {
           currentRotor = 2;
         } else {
           currentRotor -= 1;
         }
         rotationCount = 1;
-        console.log(this.rotors[currentRotor]);
         this.rotors[currentRotor].rotate();
       }
     }
-    // console.log("Ini results : ", results);
     return results;
   }
 }

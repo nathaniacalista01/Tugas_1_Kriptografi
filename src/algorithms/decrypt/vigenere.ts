@@ -50,4 +50,5 @@ export const decryptVigenere = ({isStandard, key = "", decryptText, extension}: 
     }else{
         return decryptedText
     }
+
 }
