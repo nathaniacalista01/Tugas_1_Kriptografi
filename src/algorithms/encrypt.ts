@@ -34,8 +34,6 @@ export const encrypt = ({
 }: EncryptInterface) => {
   // console.log("Ini extension : ", extension)
   const sanitized = sanitized_text(plainText);
-  console.log(sanitized);
-  console.log("ini ext", extension);
   switch (algorithm) {
     case "vigenere":
       return vigenere({ isStandard: true, key, plainText });
@@ -66,7 +64,7 @@ export const encrypt = ({
         firstRotor,
         secondRotor,
         thirdRotor,
-        extension
+        extension,
       });
     default:
       break;

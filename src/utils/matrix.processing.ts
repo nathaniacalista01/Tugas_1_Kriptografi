@@ -84,6 +84,14 @@ export const matrixInverse = (matrix: number[][]) => {
       if (invMatrix[i][j] < 0) invMatrix[i][j] += 26;
     }
   }
-  console.log("Ini inv matrix : ", invMatrix);
   return invMatrix;
+};
+
+export const isMatrixValid = (matrix: string[][]) => {
+  const numberMatrix = matrixConverter({ matrix });
+  const det = math.det(numberMatrix); // Assuming you have this function implemented
+  const detMod = det % 26;
+
+  // Use math.gcd to calculate the GCD
+  return math.gcd(detMod, 26) === 1;
 };
