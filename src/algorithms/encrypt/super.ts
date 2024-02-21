@@ -6,7 +6,7 @@ interface SuperInterface{
     extension? : string
 }
 
-export const superEncryption = ({key = "", plainText, extension, byteArray} : SuperInterface) =>  {
+export const superEncryption = ({key = "", plainText, extension} : SuperInterface) =>  {
     const specialChar = 'A';
     const keyLength = key.length
     const key_l = Array.from(key).sort()
@@ -15,7 +15,7 @@ export const superEncryption = ({key = "", plainText, extension, byteArray} : Su
         plainText += specialChar
     }
     // const row = plainText.length / keyLength
-    const cipherTemp = vigenereExt({key, plainText, extension, byteArray})
+    const cipherTemp = vigenereExt({key, plainText, extension})
     // transposition
     const matrix = []
     for(let i = 0; i < cipherTemp.length; i+= keyLength){
