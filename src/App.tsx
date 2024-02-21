@@ -19,8 +19,8 @@ import AffineCipherForm from "./components/affine.key";
 import MatrixDisplay from "./components/hill.key";
 import { decrypt } from "./algorithms/decrypt";
 import EnigmaKey from "./components/enigma.key";
-import { isRotorValid } from "./utils/rotor";
 import { downloadFile } from "./utils/file.downloader";
+import { RotorInterface } from "./type/engima.type";
 
 function App() {
   const [type, setType] = useState("text");
@@ -95,6 +95,21 @@ function App() {
     downloadFile(result, setErrorMessage);
   };
 
+  const checkRotor = (rotor: RotorInterface) => {
+    const cleanInnerRing = rotor.innerRing
+      .replace(/[^a-zA-Z]/g, "")
+      .toUpperCase();
+    const result =
+      cleanInnerRing.length === 26 && new Set(cleanInnerRing).size === 26;
+    if (!result) {
+      setErrorMessage("Rotor must consist of alphabet A-Z");
+    } else {
+      setErrorMessage("");
+    }
+    return result;
+    // return cleanInnerRing.length === 26 && new Set(cleanInnerRing).size === 26;
+  };
+
   const checkEncrypt = () => {
     if (algorithm === "") {
       setIsDisabled(true);
@@ -116,9 +131,9 @@ function App() {
         case "enigma":
           setIsDisabled(
             !(
-              isRotorValid(firstRotor) &&
-              isRotorValid(secondRotor) &&
-              isRotorValid(thirdRotor)
+              checkRotor(firstRotor) &&
+              checkRotor(secondRotor) &&
+              checkRotor(thirdRotor)
             )
           );
           break;
