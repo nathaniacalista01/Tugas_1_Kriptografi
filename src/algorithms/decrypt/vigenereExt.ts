@@ -3,9 +3,10 @@ import { space_remover } from "../../utils/remover";
 interface vigenereExtDecryptInterface{
     key?: string;
     decryptText: string;
+    extension?: string
 }
 
-export const decryptVigenereExt = ({key= "", decryptText } : vigenereExtDecryptInterface) => {
+export const decryptVigenereExt = ({key= "", decryptText, extension } : vigenereExtDecryptInterface) => {
     decryptText = space_remover(decryptText)
     let decryptedText = ""
     const keyLength = key.length
@@ -16,8 +17,11 @@ export const decryptVigenereExt = ({key= "", decryptText } : vigenereExtDecryptI
         const decryptedCharCode = (charCodeCipherText - charCodeKey) % 256
         decryptedText += String.fromCharCode(decryptedCharCode)
     }
-
-    return decryptedText
+    if(extension){
+        return decryptedText + "." + extension
+    }else{
+        return decryptedText
+    }
 
 
 }

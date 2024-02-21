@@ -11,8 +11,8 @@ export const downloadFile = (
   const parts = result.split(".");
   let fileName, fileURL, blob;
   if (parts.length > 1) {
-    const extension = parts[1];
-    const content = parts[0];
+    const extension = parts[parts.length-1];
+    const content = parts.slice(0, -1).join("")
 
     fileName = `data.${extension}`;
 

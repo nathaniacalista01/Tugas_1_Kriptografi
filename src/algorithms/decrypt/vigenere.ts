@@ -2,11 +2,12 @@ import { space_remover } from "../../utils/remover";
 interface VigenereDecryptInterface{
     isStandard: boolean;
     key?: string;
-    decryptText: string    
+    decryptText: string;
+    extension?: string
  }
 
 
-export const decryptVigenere = ({isStandard, key = "", decryptText}: VigenereDecryptInterface) => {
+export const decryptVigenere = ({isStandard, key = "", decryptText, extension}: VigenereDecryptInterface) => {
     key = key.toUpperCase()
     decryptText = space_remover(decryptText.toUpperCase().replace(/[^a-zA-Z]/g, ''))
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -39,6 +40,9 @@ export const decryptVigenere = ({isStandard, key = "", decryptText}: VigenereDec
         }
     }
 
-    console.log(decryptedText)
-    return decryptedText
+    if(extension){
+        return decryptedText + "." + extension
+    }else{
+        return decryptedText
+    }
 }

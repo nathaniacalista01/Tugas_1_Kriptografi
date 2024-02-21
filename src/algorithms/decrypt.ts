@@ -38,13 +38,13 @@ export const decrypt = ({
   switch (algorithm) {
     case "vigenere":
       // Enter function for vignere
-      return decryptVigenere({ isStandard: true, key, decryptText });
+      return decryptVigenere({ isStandard: true, key, decryptText, extension });
     case "varian-vigenere":
-      return decryptVigenere({ isStandard: false, key, decryptText });
+      return decryptVigenere({ isStandard: false, key, decryptText, extension });
     case "extended-vigenere":
-      return decryptVigenereExt({ key, decryptText });
+      return decryptVigenereExt({ key, decryptText, extension });
     case "super":
-      return superDecryption({ key, decryptText });
+      return superDecryption({ key, decryptText, extension });
     case "playfair":
       return playfairDecrypt({ key, decryptText, extension });
     case "affine":

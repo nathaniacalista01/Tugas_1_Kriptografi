@@ -3,9 +3,10 @@ import { decryptVigenereExt } from "./vigenereExt";
 interface superDecryptionInterface{
     key?: string;
     decryptText: string
+    extension?: string
 }
 
-export const superDecryption = ({key = "", decryptText} : superDecryptionInterface) => {
+export const superDecryption = ({key = "", decryptText, extension} : superDecryptionInterface) => {
     let tempResult = "";
     let kId = 0;
     let dId = 0;
@@ -44,8 +45,12 @@ export const superDecryption = ({key = "", decryptText} : superDecryptionInterfa
         tempResult = tempResult.slice(0, -null_count);
     }
     decryptText = tempResult
-    const result = decryptVigenereExt({key, decryptText})
-    return result
+    const result = decryptVigenereExt({key, decryptText, extension})
+    if(extension){
+        return result + "." + extension
+    }else{
+        return result
+    }
 
 
 
