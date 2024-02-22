@@ -86,7 +86,7 @@ export const isMatrixValid = (matrix: string[][]) => {
   const numberMatrix = matrixConverter({ matrix });
   const det = math.det(numberMatrix); // Assuming you have this function implemented
   const detMod = det % 26;
-
+  console.log("ini math : ", math.gcd(detMod+26, 26))
   // Use math.gcd to calculate the GCD
   return math.gcd(detMod, 26) === 1;
 };
