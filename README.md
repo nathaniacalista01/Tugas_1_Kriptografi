@@ -1,30 +1,39 @@
-# React + TypeScript + Vite
+# LeMeS
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> Disusun untuk memenuhi Tugas 1 - Cipher Tradisional dari Mata Kuliah Kriptografi
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Deskripsi Aplikasi Web
 
-## Expanding the ESLint configuration
+Aplikasi ini merupakan aplikasi berbasis web yang dibangun dengan menggunakan React Js. Dalam website ini, pengguna bisa melakukan enkripsi dan dekripsi untuk text yang dimasukkan melalui keyboar ataupun file yang di input oleh user.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Daftar Algoritma
 
-- Configure the top-level `parserOptions` property like this:
+1. Vigenere Cipher
+2. Varian - Vigenere Cipher
+3. Extended - Vigenere Cipher
+4. Playfair Cipher
+5. Super Cipher
+6. Affine Cipher
+7. Hill Cipher
+8. Enigma Cipher
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+## Cara Instalasi
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+1. Lakukan pengunduhan repository ini dengan menggunakan perintah `git clone https://github.com/nathaniacalista01/Tugas_1_Kriptografi.git` pada terminal komputer Anda.
+2. Masukkan perintah `npm install `.
+
+## Cara Menjalankan Server
+
+1. Anda dapat menjalankan program ini dengan menjalankan perintah `npm run dev` pada terminal directory aplikasi web.
+
+
+## Author
+
+### _Server Side_
+
+| Fitur                         | NIM      |
+| ------------------------------| -------- |
+| Nathania Calista Djunaedi  | 13521139 |
+| Kandida Edgina Gunawan | 13521155 |
+
