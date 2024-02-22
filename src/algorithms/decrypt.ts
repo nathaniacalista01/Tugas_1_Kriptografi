@@ -36,18 +36,20 @@ export const decrypt = ({
 }: DecryptInterface) => {
   let extension;
   let content = decryptText;
+  console.log('content')
+  console.log(content)
   const parts = decryptText.split(".");
   if (parts.length > 1) {
-    extension = parts[1];
-    content  = parts[0]
+    extension = parts[parts.length-1];
+    content  = parts.slice(0, -1).join("")
   }
   
   switch (algorithm) {
     case "vigenere":
       // Enter function for vignere
-      return decryptVigenere({ isStandard: true, key, decryptText : content });
+      return decryptVigenere({ isStandard: true, key, decryptText : content, extension });
     case "varian-vigenere":
-      return decryptVigenere({ isStandard: false, key, decryptText : content });
+      return decryptVigenere({ isStandard: false, key, decryptText : content, extension });
     case "extended-vigenere":
       return decryptVigenereExt({ key, decryptText : content, extension});
     case "super":

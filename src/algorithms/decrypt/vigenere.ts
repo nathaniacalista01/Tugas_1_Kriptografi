@@ -30,7 +30,7 @@ export const decryptVigenere = ({isStandard, key = "", decryptText, extension}: 
             console.log(encryptedPos)
             const newLetter = alphabet[encryptedPos]
             decryptedText += newLetter
-            console.log('testttt bro')
+    
             console.log(newLetter)
         }
 
@@ -46,8 +46,10 @@ export const decryptVigenere = ({isStandard, key = "", decryptText, extension}: 
     }
 
     if(extension){
+        console.log('ada')
         return decryptedText + "." + extension
     }else{
+        console.log('gaada')
         return decryptedText
     }
 
