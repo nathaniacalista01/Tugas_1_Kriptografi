@@ -36,8 +36,6 @@ export const decrypt = ({
 }: DecryptInterface) => {
   let extension;
   let content = decryptText;
-  console.log('content')
-  console.log(content)
   const parts = decryptText.split(".");
   if (parts.length > 1) {
     extension = parts[parts.length-1];

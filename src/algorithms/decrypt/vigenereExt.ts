@@ -20,7 +20,6 @@ export const decryptVigenereExt = ({key= "", decryptText, extension } : vigenere
         decryptedText += String.fromCharCode(decryptedCharCode)
     }
     if(extension){
-        console.log(decryptedText)
         return decryptedText + "." + extension
     }else{
         return decryptedText
