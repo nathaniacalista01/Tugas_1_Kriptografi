@@ -9,6 +9,7 @@ import { RotorInterface } from "../type/engima.type";
 import { decryptEnigma } from "./decrypt/enigma";
 import { decryptVigenereExt } from "./decrypt/vigenereExt";
 import { superDecryption } from "./decrypt/super";
+import { sanitized_text } from "../utils/plaintext.processing";
 
 interface DecryptInterface {
   matrix?: string[][];
@@ -33,13 +34,19 @@ export const decrypt = ({
   secondRotor,
   thirdRotor,
 }: DecryptInterface) => {
-  console.log("Ini decryp text length", decryptText.length);
   switch (algorithm) {
     case "vigenere":
-      // Enter function for vignere
-      return decryptVigenere({ isStandard: true, key, decryptText });
+      return decryptVigenere({
+        isStandard: true,
+        key,
+        decryptText: sanitized_text(decryptText),
+      });
     case "varian-vigenere":
-      return decryptVigenere({ isStandard: false, key, decryptText });
+      return decryptVigenere({
+        isStandard: false,
+        key,
+        decryptText: sanitized_text(decryptText),
+      });
     case "extended-vigenere":
       return decryptVigenereExt({ key, decryptText });
     case "super":
@@ -47,12 +54,19 @@ export const decrypt = ({
     case "playfair":
       return playfairDecrypt({ key, decryptText });
     case "affine":
-      return decryptAffine({ slope, intercept, decryptText });
+      return decryptAffine({
+        slope,
+        intercept,
+        decryptText: sanitized_text(decryptText),
+      });
     case "hill":
-      return decryptHill({ stringMatrix: matrix, decryptText });
+      return decryptHill({
+        stringMatrix: matrix,
+        decryptText: sanitized_text(decryptText),
+      });
     case "enigma":
       return decryptEnigma({
-        decryptText,
+        decryptText: sanitized_text(decryptText),
         firstRotor,
         secondRotor,
         thirdRotor,

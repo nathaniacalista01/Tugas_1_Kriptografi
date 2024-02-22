@@ -5,7 +5,6 @@ import { space_remover } from "../../utils/remover";
 interface DecryptHillCipherProps {
   stringMatrix?: string[][];
   decryptText: string;
-  extension? : string;
 }
 
 export const decryptHill = ({
@@ -14,7 +13,6 @@ export const decryptHill = ({
     ["", ""],
   ],
   decryptText,
-  extension
 }: DecryptHillCipherProps) => {
   const normalizedText = space_remover(decryptText).toLowerCase();
   const numbers = convertPlainTextToNumber(normalizedText);
@@ -24,8 +22,6 @@ export const decryptHill = ({
     stringMatrix.length
   );
   const result = matrix.decryptMatrix(decryptTextMatrix);
-  if(extension){
-    return result + "." + extension
-  }
+
   return result;
 };

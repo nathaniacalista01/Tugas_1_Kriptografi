@@ -47,16 +47,18 @@ function App() {
   });
   const [matrix, setMatrix] = useState<string[][]>([[], []]);
   const [file, setFile] = useState<File | null>();
-  const [extension, setExtension] = useState("");
+  const [filename, setFilename] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [base64, setBase64] = useState("");
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const reset = () => {
     setFile(null);
     setPlainText("");
     setErrorMessage("");
-    setExtension("");
+    setFilename("");
     setResult("");
+    setBase64("");
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -85,8 +87,10 @@ function App() {
     if (algorithm === "hill" && !isMatrixValid(matrix)) {
       setErrorMessage("Matrix is not valid");
       return;
+    } else {
+      setErrorMessage("");
     }
-    const result = encrypt({
+    const encryptResult = encrypt({
       matrix,
       slope,
       intercept,
@@ -96,14 +100,14 @@ function App() {
       firstRotor,
       secondRotor,
       thirdRotor,
-      extension,
     });
-    setResult(result ? result : "");
+    setResult(encryptResult ? encryptResult : "");
+    setBase64(btoa(encryptResult ? encryptResult : ""));
 
     // console.log("ini result : ", result, result?.length);
   };
   const saveToBinaryFile = (): void => {
-    downloadFile(algorithm,value, result, extension, setErrorMessage);
+    downloadFile(result, filename);
   };
 
   const handleSlopeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -122,14 +126,6 @@ function App() {
     setPlainText("");
     setFile(null);
     setType(event.target.value);
-  };
-  const toBase64 = (str: string) => {
-    try {
-      return btoa(str);
-    } catch (e) {
-      setErrorMessage("Error in Base64 encoding");
-      return null;
-    }
   };
 
   useEffect(() => {
@@ -166,7 +162,7 @@ function App() {
     if (file) {
       const reader = new FileReader();
       if (file.name.split(".").length > 1) {
-        setExtension(file.name);
+        setFilename(file.name);
       }
       if (file.name.includes(".txt")) {
         reader.readAsText(file, "ISO-8859-1");
@@ -179,7 +175,7 @@ function App() {
         reader.onload = () => {
           const arrBuffer = reader.result as string;
           const binaryString = arrBuffer;
-          console.log(binaryString.length)
+          console.log(binaryString.length);
 
           // console.log("Ini binary string : ", binaryString)
           setPlainText(binaryString);
@@ -316,17 +312,19 @@ function App() {
         {algorithm === "hill" && (
           <MatrixDisplay matrix={matrix} setMatrix={setMatrix} />
         )}
-        <Text>{result}</Text>
+        {result && (
+          <>
+            <Text>Result (Plain)</Text>
+            <Input type="text" value={result} placeholder="Result" />
+          </>
+        )}
+        {base64 && (
+          <>
+            <Text>Result (Base 64: )</Text>
 
-        {/* {result && (
-          <FormControl>
-            <FormLabel>Result (Plain)</FormLabel>
-            <Text>{result}</Text>
-            <FormLabel>Result (base 64)</FormLabel>
-            <Text>{toBase64(result)}</Text>
-          </FormControl>
-        )} */}
-        {/* <Text>{toBase64(result)}</Text> */}
+            <Input type="text" value={base64} placeholder="Result in base64" />
+          </>
+        )}
 
         <ButtonGroup variant="outline" spacing="6" mt={12}>
           {value === "encrypt" ? (

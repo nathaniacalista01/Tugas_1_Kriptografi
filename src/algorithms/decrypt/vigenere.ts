@@ -3,11 +3,10 @@ interface VigenereDecryptInterface{
     isStandard: boolean;
     key?: string;
     decryptText: string;
-    extension?: string
  }
 
 
-export const decryptVigenere = ({isStandard, key = "", decryptText, extension}: VigenereDecryptInterface) => {
+export const decryptVigenere = ({isStandard, key = "", decryptText}: VigenereDecryptInterface) => {
     key = key.toUpperCase()
     decryptText = space_remover(decryptText.toUpperCase().replace(/[^a-zA-Z]/g, ''))
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -44,10 +43,6 @@ export const decryptVigenere = ({isStandard, key = "", decryptText, extension}: 
         }
     }
 
-    if(extension){
-        return decryptedText + "." + extension
-    }else{
-        return decryptedText
-    }
+    return decryptedText
 
 }

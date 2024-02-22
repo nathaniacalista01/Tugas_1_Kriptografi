@@ -32,12 +32,19 @@ export const encrypt = ({
   thirdRotor,
 }: EncryptInterface) => {
   // const sanitized = sanitized_text(plainText);
-  console.log("Ini plain text di encrypt ", plainText.length)
   switch (algorithm) {
     case "vigenere":
-      return vigenere({ isStandard: true, key, plainText });
+      return vigenere({
+        isStandard: true,
+        key,
+        plainText: sanitized_text(plainText),
+      });
     case "varian-vigenere":
-      return vigenere({ isStandard: false, key, plainText });
+      return vigenere({
+        isStandard: false,
+        key,
+        plainText: sanitized_text(plainText),
+      });
     case "extended-vigenere":
       return vigenereExt({ key, plainText });
     case "super":

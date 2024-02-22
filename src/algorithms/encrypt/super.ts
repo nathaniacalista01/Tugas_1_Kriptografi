@@ -3,10 +3,9 @@ import { vigenereExt } from "./vigenereExt";
 interface SuperInterface{
     key? : string;
     plainText : string
-    extension? : string
 }
 
-export const superEncryption = ({key = "", plainText, extension} : SuperInterface) =>  {
+export const superEncryption = ({key = "", plainText} : SuperInterface) =>  {
     const specialChar = 'A';
     const keyLength = key.length
     const key_l = Array.from(key).sort()
@@ -14,7 +13,7 @@ export const superEncryption = ({key = "", plainText, extension} : SuperInterfac
     while(plainText.length % keyLength != 0){
         plainText += specialChar
     }
-    const cipherTemp = vigenereExt({key, plainText, extension})
+    const cipherTemp = vigenereExt({key, plainText})
     console.log("test super")
     console.log(cipherTemp)
     // transposition
@@ -32,9 +31,6 @@ export const superEncryption = ({key = "", plainText, extension} : SuperInterfac
             }
         }
         kId++;
-    }
-    if(extension){
-        return cipherText + "." + extension
     }
     return cipherText
 

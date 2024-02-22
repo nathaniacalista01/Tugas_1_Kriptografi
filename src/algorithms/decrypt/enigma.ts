@@ -5,7 +5,6 @@ interface EncryptEnigmaInterface {
   firstRotor?: RotorInterface;
   secondRotor?: RotorInterface;
   thirdRotor?: RotorInterface;
-  extension?: string;
 }
 
 export const decryptEnigma = ({
@@ -13,13 +12,9 @@ export const decryptEnigma = ({
   firstRotor,
   secondRotor,
   thirdRotor,
-  extension,
 }: EncryptEnigmaInterface) => {
   const enigmaMachine = new EnigmaMachine(firstRotor, secondRotor, thirdRotor);
   const content =  decryptText.split(".")[0]
   const result = enigmaMachine.decrypt(content);
-  if (extension) {
-    return result + "." + extension;
-  }
   return result;
 };

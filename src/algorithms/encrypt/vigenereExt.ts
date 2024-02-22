@@ -14,6 +14,5 @@ export const vigenereExt = ({ key = "", plainText }: vigenereExtInterface) => {
     charCode = charCode + (key.charCodeAt(i % keyLength) % 256);
     cipherText += String.fromCharCode(charCode);
   }
-  console.log("Ini cipher text : ", plainText.length);
   return cipherText;
 };
