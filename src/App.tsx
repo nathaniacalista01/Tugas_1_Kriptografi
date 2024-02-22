@@ -20,8 +20,8 @@ import MatrixDisplay from "./components/hill.key";
 import { decrypt } from "./algorithms/decrypt";
 import EnigmaKey from "./components/enigma.key";
 import { downloadFile } from "./utils/file.downloader";
-import { RotorInterface } from "./type/engima.type";
 import { isMatrixValid } from "./utils/matrix.processing";
+import { checkButton } from "./utils/checker";
 
 function App() {
   const [type, setType] = useState("text");
@@ -65,8 +65,8 @@ function App() {
     if (algorithm === "hill" && !isMatrixValid(matrix)) {
       setErrorMessage("Matrix is not valid");
       return;
-    }else{
-      setErrorMessage("")
+    } else {
+      setErrorMessage("");
     }
     const result = decrypt({
       matrix,
@@ -107,51 +107,6 @@ function App() {
     downloadFile(value, result, setErrorMessage);
   };
 
-  const checkRotor = (rotor: RotorInterface) => {
-    const cleanInnerRing = rotor.innerRing
-      .replace(/[^a-zA-Z]/g, "")
-      .toUpperCase();
-    const result =
-      cleanInnerRing.length === 26 && new Set(cleanInnerRing).size === 26;
-    if (!result) {
-      setErrorMessage("Rotor must consist of alphabet A-Z");
-    } else {
-      setErrorMessage("");
-    }
-    return result;
-  };
-
-  const checkEncrypt = () => {
-    if (algorithm === "") {
-      setIsDisabled(true);
-    } else {
-      switch (algorithm) {
-        case "vigenere" ||
-          "varian-vignere" ||
-          "extended-vignere" ||
-          "super" ||
-          "playfair":
-          setIsDisabled(key === "" || plainText === "");
-          break;
-        case "affine":
-          setIsDisabled(!(slope && intercept));
-          break;
-        case "hill":
-          setIsDisabled(matrix.length <= 0 || plainText === "");
-          break;
-        case "enigma":
-          setIsDisabled(
-            !(
-              checkRotor(firstRotor) &&
-              checkRotor(secondRotor) &&
-              checkRotor(thirdRotor)
-            )
-          );
-          break;
-      }
-    }
-  };
-
   const handleSlopeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSlope(Number(event.target.value));
     setResult("");
@@ -179,7 +134,19 @@ function App() {
   };
 
   useEffect(() => {
-    checkEncrypt();
+    checkButton(
+      setIsDisabled,
+      setErrorMessage,
+      algorithm,
+      matrix,
+      plainText,
+      firstRotor,
+      secondRotor,
+      thirdRotor,
+      slope,
+      intercept,
+      key
+    );
   }, [
     plainText,
     slope,
@@ -189,6 +156,7 @@ function App() {
     firstRotor,
     secondRotor,
     thirdRotor,
+    algorithm,
   ]);
 
   useEffect(() => {
@@ -264,7 +232,6 @@ function App() {
             </Stack>
           </RadioGroup>
         </FormControl>
-
         <FormControl id="input-text">
           <FormLabel>
             {value === "encrypt" ? "Input Text" : "Encrypted Text"}
@@ -349,15 +316,8 @@ function App() {
         {algorithm === "hill" && (
           <MatrixDisplay matrix={matrix} setMatrix={setMatrix} />
         )}
-        {result && (
-          <FormControl>
-            <FormLabel>Result (Plain)</FormLabel>
-            <Text>{result}</Text>
-            <FormLabel>Result (base 64)</FormLabel>
-            <Text>{toBase64(result)}</Text>
-          </FormControl>
-        )}
-
+        <Text>{result}</Text>
+        <Text>{toBase64(result)}</Text>
         <ButtonGroup variant="outline" spacing="6" mt={12}>
           {value === "encrypt" ? (
             <Button
@@ -371,7 +331,7 @@ function App() {
             <Button
               colorScheme="blue"
               onClick={() => handleDecrypt()}
-              isDisabled={isDisabled}
+              // isDisabled={isDisabled}
             >
               Decrypt
             </Button>
