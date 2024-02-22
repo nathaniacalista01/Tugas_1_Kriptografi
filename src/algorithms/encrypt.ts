@@ -30,40 +30,37 @@ export const encrypt = ({
   firstRotor,
   secondRotor,
   thirdRotor,
-  extension,
 }: EncryptInterface) => {
-  const sanitized = sanitized_text(plainText);
+  // const sanitized = sanitized_text(plainText);
+  console.log("Ini plain text di encrypt ", plainText.length)
   switch (algorithm) {
     case "vigenere":
-      return vigenere({ isStandard: true, key, plainText, extension});
+      return vigenere({ isStandard: true, key, plainText });
     case "varian-vigenere":
-      return vigenere({ isStandard: false, key, plainText, extension });
+      return vigenere({ isStandard: false, key, plainText });
     case "extended-vigenere":
-      return vigenereExt({ key, plainText, extension});
+      return vigenereExt({ key, plainText });
     case "super":
-      return superEncryption({ key, plainText, extension});
+      return superEncryption({ key, plainText });
     case "playfair":
-      return playfair({ key, plainText: sanitized, extension });
+      return playfair({ key, plainText: sanitized_text(plainText) });
     case "affine":
       return affineCipher({
         slope,
         intercept,
-        plainText: sanitized,
-        extension,
+        plainText: sanitized_text(plainText),
       });
     case "hill":
       return hillCipher({
         stringMatrix: matrix,
-        plainText: sanitized,
-        extension,
+        plainText: sanitized_text(plainText),
       });
     case "enigma":
       return enigmaCipher({
-        plainText: sanitized,
+        plainText: sanitized_text(plainText),
         firstRotor,
         secondRotor,
         thirdRotor,
-        extension,
       });
     default:
       break;

@@ -1,29 +1,19 @@
-import { space_remover } from "../../utils/remover";
 
-interface vigenereExtInterface{
-    key?: string;
-    plainText: string;
-    extension? : string;
+interface vigenereExtInterface {
+  key?: string;
+  plainText: string;
 }
 
-export const vigenereExt = ({key = "", plainText, extension}: vigenereExtInterface) =>{
-    plainText = space_remover(plainText)
-    const keyLength = key.length
-
-    let cipherText = ""
-    for(let i = 0; i < plainText.length; i++){
-        const charCodePlainText = plainText.charCodeAt(i);
-        const charCodeKey = key.charCodeAt(i % keyLength);
-        
-        const encryptedCharCode = (charCodePlainText + charCodeKey) % 256;
-        cipherText += String.fromCharCode(encryptedCharCode);
-    }
-    if(extension){
-        return cipherText + "." + extension
-    }
-    return cipherText
-}
-
-    
-
-
+export const vigenereExt = ({ key = "", plainText }: vigenereExtInterface) => {
+  //   plainText = space_remover(plainText);
+  const keyLength = key.length;
+  console.log("Ini pl;ain text di vignere ext", plainText.length);
+  let cipherText = "";
+  for (let i = 0; i < plainText.length; i++) {
+    let charCode = plainText.charCodeAt(i);
+    charCode = charCode + (key.charCodeAt(i % keyLength) % 256);
+    cipherText += String.fromCharCode(charCode);
+  }
+  console.log("Ini cipher text : ", plainText.length);
+  return cipherText;
+};

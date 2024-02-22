@@ -78,7 +78,6 @@ function App() {
       firstRotor,
       secondRotor,
       thirdRotor,
-      extension,
     });
     setResult(result ? result : "");
   };
@@ -92,7 +91,7 @@ function App() {
       slope,
       intercept,
       key,
-      plainText: plainText.replace(/[^A-Za-z]/g, ""),
+      plainText,
       algorithm,
       firstRotor,
       secondRotor,
@@ -100,11 +99,11 @@ function App() {
       extension,
     });
     setResult(result ? result : "");
-  
-    console.log(value);
+
+    // console.log("ini result : ", result, result?.length);
   };
   const saveToBinaryFile = (): void => {
-    downloadFile(value, result, setErrorMessage);
+    downloadFile(algorithm,value, result, extension, setErrorMessage);
   };
 
   const handleSlopeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -167,9 +166,7 @@ function App() {
     if (file) {
       const reader = new FileReader();
       if (file.name.split(".").length > 1) {
-        const fileName = file.name.split(".");
-        console.log(fileName[fileName.length - 1]);
-        setExtension(fileName[fileName.length - 1]);
+        setExtension(file.name);
       }
       if (file.name.includes(".txt")) {
         reader.readAsText(file, "ISO-8859-1");
@@ -178,12 +175,13 @@ function App() {
           setPlainText(text as string);
         };
       } else {
-        reader.readAsArrayBuffer(file);
+        reader.readAsBinaryString(file);
         reader.onload = () => {
-          const arrBuffer = reader.result as ArrayBuffer;
-          const binaryString = new TextDecoder().decode(
-            new Uint8Array(arrBuffer)
-          );
+          const arrBuffer = reader.result as string;
+          const binaryString = arrBuffer;
+          console.log(binaryString.length)
+
+          // console.log("Ini binary string : ", binaryString)
           setPlainText(binaryString);
         };
       }
@@ -328,7 +326,7 @@ function App() {
             <Text>{toBase64(result)}</Text>
           </FormControl>
         )} */}
-        <Text>{toBase64(result)}</Text>
+        {/* <Text>{toBase64(result)}</Text> */}
 
         <ButtonGroup variant="outline" spacing="6" mt={12}>
           {value === "encrypt" ? (
