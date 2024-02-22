@@ -98,7 +98,7 @@ function App() {
       extension,
     });
     setResult(result ? result : "");
-    console.log("testre");
+  
     console.log(value);
   };
   const saveToBinaryFile = (): void => {
@@ -197,10 +197,12 @@ function App() {
     if (file) {
       const reader = new FileReader();
       if (file.name.split(".").length > 1) {
-        setExtension(file.name.split(".")[1]);
+        const fileName = file.name.split(".");
+        console.log(fileName[fileName.length - 1]);
+        setExtension(fileName[fileName.length - 1]);
       }
       if (file.name.includes(".txt")) {
-        reader.readAsText(file);
+        reader.readAsText(file, "ISO-8859-1");
         reader.onload = () => {
           const text = reader.result;
           setPlainText(text as string);
@@ -347,14 +349,15 @@ function App() {
         {algorithm === "hill" && (
           <MatrixDisplay matrix={matrix} setMatrix={setMatrix} />
         )}
-        {result && (
+        <Text>{result}</Text>
+        {/* {result && (
           <FormControl>
             <FormLabel>Result (Plain)</FormLabel>
             <Text>{result}</Text>
             <FormLabel>Result (base 64)</FormLabel>
             <Text>{toBase64(result)}</Text>
           </FormControl>
-        )}
+        )} */}
 
         <ButtonGroup variant="outline" spacing="6" mt={12}>
           {value === "encrypt" ? (

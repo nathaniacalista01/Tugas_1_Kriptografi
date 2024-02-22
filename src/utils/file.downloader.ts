@@ -10,30 +10,41 @@ export const downloadFile = (
     return;
   }
   const parts = result.split(".");
+
   let fileName, fileURL, blob;
   // if (method === "encrypt") {
   //   fileName = "data.bin";
   //   blob = new Blob([result], { type: "application/octet-stream" });
   //   fileURL = URL.createObjectURL(blob);
   // } else {
-  if (parts.length > 1) {
-      const extension = parts[1];
-      const content = parts[0];
-
+    if (parts.length > 1) {
+      const extension = parts[parts.length - 1];
+      const content = parts.slice(0, -1).join("");
+    
+      // Include extension in the content
+      const contentWithExtension = `${content}.${extension}`;
+    
       fileName = `data.${extension}`;
+    
       const out = [];
-
-        for(let i = 0; i < result.length; i++){
-          out.push(content.charCodeAt(i))
-        }
-      
-
-      blob = new Blob([new Uint8Array(out)], {
+    
+      // Convert each character to its char code and push it to the array
+      for (let i = 0; i < contentWithExtension.length; i++) {
+        out.push(contentWithExtension.charCodeAt(i));
+      }
+    
+      // Create a new Uint8Array from the array of char codes
+      const uint8Array = new Uint8Array(out);
+    
+      // Create a Blob with the Uint8Array and set the MIME type
+      blob = new Blob([uint8Array], {
         type: "application/octet-stream",
       });
-
+    
+      // Create a file URL for the Blob
       fileURL = URL.createObjectURL(blob);
-  } else {
+    }
+    else {
     const content = parts[0];
       fileName = "data.bin";
       const out = [];
