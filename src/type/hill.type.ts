@@ -3,7 +3,6 @@ import {
   matrixInverse,
   matrixNumberToString,
 } from "../utils/matrix.processing";
-import * as math from "mathjs";
 
 export class HillMatrix {
   private matrix: number[][];
@@ -61,7 +60,6 @@ export class HillMatrix {
     return results;
   }
   public getInverse() {
-    console.log(math.det(this.matrix));
     return matrixInverse(this.matrix);
   }
 }

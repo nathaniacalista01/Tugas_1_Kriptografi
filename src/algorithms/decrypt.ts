@@ -44,8 +44,6 @@ export const decrypt = ({
     content  = parts.slice(0, -1).join("")
   }
   
-  console.log("Ini extension : ", extension);
-
   switch (algorithm) {
     case "vigenere":
       // Enter function for vignere

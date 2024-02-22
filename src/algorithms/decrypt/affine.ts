@@ -14,7 +14,6 @@ export const decryptAffine = ({
   extension,
 }: DecryptAffineCipherProps) => {
   let plainText = "";
-  console.log("Ini decrtp", decryptText, extension);
   const decrypt = space_remover(decryptText).toUpperCase();
   let a_inverse = 0;
   for (let i = 0; i < 26; i++) {

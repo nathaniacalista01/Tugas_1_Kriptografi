@@ -12,6 +12,7 @@ export const downloadFile = (
   const parts = result.split(".");
 
   let fileName, fileURL, blob;
+
   // if (method === "encrypt") {
   //   fileName = "data.bin";
   //   blob = new Blob([result], { type: "application/octet-stream" });
@@ -59,6 +60,7 @@ export const downloadFile = (
       // }
       blob = new Blob([new Uint8Array(out)], { type: "application/octet-stream" });
       fileURL = URL.createObjectURL(blob);
+
   }
   
 

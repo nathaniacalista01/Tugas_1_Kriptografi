@@ -45,7 +45,7 @@ function App() {
     innerRing: "",
     initialPosition: "",
   });
-  const [matrix, setMatrix] = useState<string[][]>([[""], [""]]);
+  const [matrix, setMatrix] = useState<string[][]>([[], []]);
   const [file, setFile] = useState<File | null>();
   const [extension, setExtension] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -62,10 +62,11 @@ function App() {
     }
   };
   const handleDecrypt = () => {
-    console.log("Masuk ahndle decertio");
     if (algorithm === "hill" && !isMatrixValid(matrix)) {
       setErrorMessage("Matrix is not valid");
       return;
+    }else{
+      setErrorMessage("")
     }
     const result = decrypt({
       matrix,
@@ -77,6 +78,7 @@ function App() {
       firstRotor,
       secondRotor,
       thirdRotor,
+      extension,
     });
     setResult(result ? result : "");
   };

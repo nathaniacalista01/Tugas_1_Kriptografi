@@ -25,7 +25,6 @@ export const playfairDecrypt = ({
   const plainTextBigrams = [];
   for (const bigram of bigrams) {
     let encrypt;
-    console.log(bigram[0], bigram[1]);
     if (playfairMatrix.isSameRow(bigram[0], bigram[1])) {
       encrypt = [
         playfairMatrix.decryptSameRow(bigram[0]),
