@@ -14,8 +14,9 @@ export const superEncryption = ({key = "", plainText, extension} : SuperInterfac
     while(plainText.length % keyLength != 0){
         plainText += specialChar
     }
-    // const row = plainText.length / keyLength
     const cipherTemp = vigenereExt({key, plainText, extension})
+    console.log("test super")
+    console.log(cipherTemp)
     // transposition
     const matrix = []
     for(let i = 0; i < cipherTemp.length; i+= keyLength){
