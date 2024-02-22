@@ -8,18 +8,18 @@ import { duplicate_remover, space_remover } from "../../utils/remover";
 interface PlayfairDecryptInterface {
   key?: string;
   decryptText: string;
-  extension? : string;
+  extension?: string;
 }
 
 export const playfairDecrypt = ({
   key = "",
   decryptText,
-  extension
+  extension,
 }: PlayfairDecryptInterface) => {
   const removedDuplicateKey = duplicate_remover(key.toUpperCase());
   const playfairMatrix = new PlayfairMatrix(removedDuplicateKey);
   const bigrams = bigramsConverter(
-    space_remover(decryptText.replace("J", "I").toUpperCase())
+    space_remover(decryptText.toUpperCase().replace("J", "I"))
   );
 
   const plainTextBigrams = [];

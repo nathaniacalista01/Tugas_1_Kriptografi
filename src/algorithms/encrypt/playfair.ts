@@ -16,7 +16,7 @@ export const playfair = ({
   const removed_duplicate_key = duplicate_remover(key.toUpperCase());
   const playfairMatrix = new PlayfairMatrix(removed_duplicate_key);
 
-  const bigrams = bigramsConverter(plainText.replace("J", "I"));
+  const bigrams = bigramsConverter(plainText.toUpperCase().replace("J", "I"));
   const descryptBigrams = [];
   for (const bigram of bigrams) {
     let decrypt;
